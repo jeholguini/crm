@@ -46,7 +46,6 @@ services:
       - ./extensions:/directus/extensions
       - ./templates:/directus/templates
       - ./scripts:/directus/scripts
-      - ./snapshots:/directus/snapshots
       - ./migrations:/directus/migrations
       - ./directus-config:/directus/directus-config
     depends_on:
