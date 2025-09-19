@@ -1,0 +1,28 @@
+{
+  "collection": "person_employment_history",
+  "meta": {
+    "accountability": "all",
+    "archive_app_filter": true,
+    "archive_field": null,
+    "archive_value": null,
+    "collapse": "open",
+    "collection": "person_employment_history",
+    "color": null,
+    "display_template": "{{id}}",
+    "group": null,
+    "hidden": false,
+    "icon": "work_history",
+    "item_duplication_fields": null,
+    "note": "Historial laboral de las personas - relación entre persona, empresa y posición",
+    "preview_url": null,
+    "singleton": false,
+    "sort": 5,
+    "sort_field": "id",
+    "translations": null,
+    "unarchive_value": null,
+    "versioning": false
+  },
+  "schema": {
+    "name": "person_employment_history"
+  }
+}

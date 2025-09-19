@@ -1,0 +1,27 @@
+{
+  "collection": "people",
+  "field": "technologies",
+  "type": "alias",
+  "meta": {
+    "collection": "people",
+    "conditions": null,
+    "display": null,
+    "display_options": null,
+    "field": "technologies",
+    "group": null,
+    "hidden": false,
+    "interface": "list-m2m",
+    "note": null,
+    "options": null,
+    "readonly": false,
+    "required": false,
+    "sort": 13,
+    "special": [
+      "m2m"
+    ],
+    "translations": null,
+    "validation": null,
+    "validation_message": null,
+    "width": "half"
+  }
+}

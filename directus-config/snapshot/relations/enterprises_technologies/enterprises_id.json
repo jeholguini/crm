@@ -1,0 +1,25 @@
+{
+  "collection": "enterprises_technologies",
+  "field": "enterprises_id",
+  "related_collection": "enterprises",
+  "meta": {
+    "junction_field": "technologies_id",
+    "many_collection": "enterprises_technologies",
+    "many_field": "enterprises_id",
+    "one_allowed_collections": null,
+    "one_collection": "enterprises",
+    "one_collection_field": null,
+    "one_deselect_action": "nullify",
+    "one_field": "technologies",
+    "sort_field": null
+  },
+  "schema": {
+    "table": "enterprises_technologies",
+    "column": "enterprises_id",
+    "foreign_key_table": "enterprises",
+    "foreign_key_column": "id",
+    "constraint_name": "enterprises_technologies_enterprises_id_foreign",
+    "on_update": "NO ACTION",
+    "on_delete": "SET NULL"
+  }
+}

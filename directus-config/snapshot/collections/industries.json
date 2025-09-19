@@ -1,0 +1,28 @@
+{
+  "collection": "industries",
+  "meta": {
+    "accountability": "all",
+    "archive_app_filter": true,
+    "archive_field": null,
+    "archive_value": null,
+    "collapse": "open",
+    "collection": "industries",
+    "color": null,
+    "display_template": "{{name}}",
+    "group": "Categories",
+    "hidden": false,
+    "icon": "factory",
+    "item_duplication_fields": null,
+    "note": "Colección para gestionar industrias del CRM",
+    "preview_url": null,
+    "singleton": false,
+    "sort": 2,
+    "sort_field": "id",
+    "translations": null,
+    "unarchive_value": null,
+    "versioning": false
+  },
+  "schema": {
+    "name": "industries"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "collection": "enterprises",
+  "field": "about",
+  "type": "text",
+  "meta": {
+    "collection": "enterprises",
+    "conditions": null,
+    "display": "formatted-value",
+    "display_options": null,
+    "field": "about",
+    "group": null,
+    "hidden": false,
+    "interface": "input-multiline",
+    "note": "Descripción de la empresa",
+    "options": null,
+    "readonly": false,
+    "required": false,
+    "sort": 12,
+    "special": null,
+    "translations": null,
+    "validation": null,
+    "validation_message": null,
+    "width": "full"
+  },
+  "schema": {
+    "name": "about",
+    "table": "enterprises",
+    "data_type": "text",
+    "default_value": null,
+    "max_length": null,
+    "numeric_precision": null,
+    "numeric_scale": null,
+    "is_nullable": true,
+    "is_unique": false,
+    "is_indexed": false,
+    "is_primary_key": false,
+    "is_generated": false,
+    "generation_expression": null,
+    "has_auto_increment": false,
+    "foreign_key_table": null,
+    "foreign_key_column": null
+  }
+}
