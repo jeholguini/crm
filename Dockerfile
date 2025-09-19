@@ -25,7 +25,6 @@ RUN npx directus bootstrap
 COPY ./extensions /directus/extensions
 COPY ./templates /directus/templates
 COPY ./migrations /directus/migrations
-COPY ./snapshots /directus/snapshots
 COPY ./config.cjs /directus/config.cjs           
 
 # Custom entrypoint script to run Directus on Railway for migrations, snapshots, and extensions
