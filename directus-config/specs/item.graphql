@@ -59,6 +59,10 @@ type Query {
   enterprises_by_id(id: ID!, version: String): enterprises
   enterprises_aggregated(groupBy: [String], filter: enterprises_filter, limit: Int, offset: Int, page: Int, search: String, sort: [String]): [enterprises_aggregated!]!
   enterprises_by_version(version: String!, id: ID!): version_enterprises
+  enterprises_industries(filter: enterprises_industries_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [enterprises_industries!]!
+  enterprises_industries_by_id(id: ID!, version: String): enterprises_industries
+  enterprises_industries_aggregated(groupBy: [String], filter: enterprises_industries_filter, limit: Int, offset: Int, page: Int, search: String, sort: [String]): [enterprises_industries_aggregated!]!
+  enterprises_industries_by_version(version: String!, id: ID!): version_enterprises_industries
 }
 
 type Mutation {
@@ -92,6 +96,8 @@ type Mutation {
   create_segments_item(data: create_segments_input!): segments
   create_enterprises_items(filter: enterprises_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [create_enterprises_input!]): [enterprises!]!
   create_enterprises_item(data: create_enterprises_input!): enterprises
+  create_enterprises_industries_items(filter: enterprises_industries_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [create_enterprises_industries_input!]): [enterprises_industries!]!
+  create_enterprises_industries_item(data: create_enterprises_industries_input!): enterprises_industries
   update_directus_sync_id_map_items(filter: directus_sync_id_map_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, ids: [ID]!, data: update_directus_sync_id_map_input!): [directus_sync_id_map!]!
   update_directus_sync_id_map_batch(filter: directus_sync_id_map_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [update_directus_sync_id_map_input!]): [directus_sync_id_map!]!
   update_directus_sync_id_map_item(id: ID!, data: update_directus_sync_id_map_input!): directus_sync_id_map
@@ -137,6 +143,9 @@ type Mutation {
   update_enterprises_items(filter: enterprises_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, ids: [ID]!, data: update_enterprises_input!): [enterprises!]!
   update_enterprises_batch(filter: enterprises_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [update_enterprises_input!]): [enterprises!]!
   update_enterprises_item(id: ID!, data: update_enterprises_input!): enterprises
+  update_enterprises_industries_items(filter: enterprises_industries_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, ids: [ID]!, data: update_enterprises_industries_input!): [enterprises_industries!]!
+  update_enterprises_industries_batch(filter: enterprises_industries_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [update_enterprises_industries_input!]): [enterprises_industries!]!
+  update_enterprises_industries_item(id: ID!, data: update_enterprises_industries_input!): enterprises_industries
   delete_directus_sync_id_map_items(ids: [ID]!): delete_many
   delete_directus_sync_id_map_item(id: ID!): delete_one
   delete_positions_items(ids: [ID]!): delete_many
@@ -167,6 +176,8 @@ type Mutation {
   delete_segments_item(id: ID!): delete_one
   delete_enterprises_items(ids: [ID]!): delete_many
   delete_enterprises_item(id: ID!): delete_one
+  delete_enterprises_industries_items(ids: [ID]!): delete_many
+  delete_enterprises_industries_item(id: ID!): delete_one
 }
 
 type Subscription {
@@ -206,6 +217,7 @@ type Subscription {
   enterprises_keywords_mutated(event: EventEnum): enterprises_keywords_mutated
   segments_mutated(event: EventEnum): segments_mutated
   enterprises_mutated(event: EventEnum): enterprises_mutated
+  enterprises_industries_mutated(event: EventEnum): enterprises_industries_mutated
 }
 
 """The `Boolean` scalar type represents `true` or `false`."""
@@ -889,9 +901,6 @@ type enterprises {
   """Logo de la empresa"""
   image: ID
 
-  """Industria de la empresa"""
-  industry: String
-
   """URL de LinkedIn"""
   linkedin: String
 
@@ -916,6 +925,8 @@ type enterprises {
   locations_func: count_functions
   technologies(filter: enterprises_technologies_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [enterprises_technologies]
   technologies_func: count_functions
+  industries(filter: enterprises_industries_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [enterprises_industries]
+  industries_func: count_functions
 }
 
 type enterprises_aggregated {
@@ -958,9 +969,6 @@ type enterprises_aggregated_count {
   """Logo de la empresa"""
   image: Int
 
-  """Industria de la empresa"""
-  industry: Int
-
   """URL de LinkedIn"""
   linkedin: Int
 
@@ -981,10 +989,48 @@ type enterprises_aggregated_count {
   keywords: Int
   locations: Int
   technologies: Int
+  industries: Int
 }
 
 type enterprises_aggregated_fields {
   id: Float
+}
+
+type enterprises_industries {
+  id: ID!
+  enterprises_id(filter: enterprises_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): enterprises
+  industries_id(filter: industries_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): industries
+}
+
+type enterprises_industries_aggregated {
+  group: JSON
+  countAll: Int
+  count: enterprises_industries_aggregated_count
+  countDistinct: enterprises_industries_aggregated_count
+  avg: enterprises_industries_aggregated_fields
+  sum: enterprises_industries_aggregated_fields
+  avgDistinct: enterprises_industries_aggregated_fields
+  sumDistinct: enterprises_industries_aggregated_fields
+  min: enterprises_industries_aggregated_fields
+  max: enterprises_industries_aggregated_fields
+}
+
+type enterprises_industries_aggregated_count {
+  id: Int
+  enterprises_id: Int
+  industries_id: Int
+}
+
+type enterprises_industries_aggregated_fields {
+  id: Float
+  enterprises_id: Float
+  industries_id: Float
+}
+
+type enterprises_industries_mutated {
+  key: ID!
+  event: EventEnum
+  data: enterprises_industries
 }
 
 type enterprises_keywords {
@@ -1652,9 +1698,6 @@ type version_enterprises {
   """Logo de la empresa"""
   image: ID
 
-  """Industria de la empresa"""
-  industry: String
-
   """URL de LinkedIn"""
   linkedin: String
 
@@ -1675,6 +1718,14 @@ type version_enterprises {
   keywords: JSON
   locations: JSON
   technologies: JSON
+  industries: JSON
+}
+
+""""""
+type version_enterprises_industries {
+  id: ID
+  enterprises_id: JSON
+  industries_id: JSON
 }
 
 """"""
@@ -1867,6 +1918,12 @@ input create_directus_sync_id_map_input {
   created_at: Date
 }
 
+input create_enterprises_industries_input {
+  id: ID
+  enterprises_id: create_enterprises_input
+  industries_id: create_industries_input
+}
+
 input create_enterprises_input {
   id: ID
 
@@ -1894,9 +1951,6 @@ input create_enterprises_input {
   """Logo de la empresa"""
   image: ID
 
-  """Industria de la empresa"""
-  industry: String
-
   """URL de LinkedIn"""
   linkedin: String
 
@@ -1917,6 +1971,7 @@ input create_enterprises_input {
   keywords: [create_enterprises_keywords_input]
   locations: [create_enterprises_locations_input]
   technologies: [create_enterprises_technologies_input]
+  industries: [create_enterprises_industries_input]
 }
 
 input create_enterprises_keywords_input {
@@ -2549,7 +2604,6 @@ input enterprises_filter {
   facebook: string_filter_operators
   founded_year: string_filter_operators
   image: id_filter_operators
-  industry: string_filter_operators
   linkedin: string_filter_operators
   name: string_filter_operators
   nit: string_filter_operators
@@ -2563,8 +2617,29 @@ input enterprises_filter {
   locations_func: count_function_filter_operators
   technologies: enterprises_technologies_quantifier_filter
   technologies_func: count_function_filter_operators
+  industries: enterprises_industries_quantifier_filter
+  industries_func: count_function_filter_operators
   _and: [enterprises_filter]
   _or: [enterprises_filter]
+}
+
+input enterprises_industries_filter {
+  id: number_filter_operators
+  enterprises_id: enterprises_filter
+  industries_id: industries_filter
+  _and: [enterprises_industries_filter]
+  _or: [enterprises_industries_filter]
+}
+
+""""""
+input enterprises_industries_quantifier_filter {
+  id: number_filter_operators
+  enterprises_id: enterprises_filter
+  industries_id: industries_filter
+  _and: [enterprises_industries_filter]
+  _or: [enterprises_industries_filter]
+  _some: enterprises_industries_filter
+  _none: enterprises_industries_filter
 }
 
 input enterprises_keywords_filter {
@@ -2849,6 +2924,12 @@ input update_directus_sync_id_map_input {
   created_at: Date
 }
 
+input update_enterprises_industries_input {
+  id: ID
+  enterprises_id: update_enterprises_input
+  industries_id: update_industries_input
+}
+
 input update_enterprises_input {
   id: ID
 
@@ -2876,9 +2957,6 @@ input update_enterprises_input {
   """Logo de la empresa"""
   image: ID
 
-  """Industria de la empresa"""
-  industry: String
-
   """URL de LinkedIn"""
   linkedin: String
 
@@ -2899,6 +2977,7 @@ input update_enterprises_input {
   keywords: [update_enterprises_keywords_input]
   locations: [update_enterprises_locations_input]
   technologies: [update_enterprises_technologies_input]
+  industries: [update_enterprises_industries_input]
 }
 
 input update_enterprises_keywords_input {

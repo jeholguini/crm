@@ -277,6 +277,7 @@ type Subscription {
   enterprises_keywords_mutated(event: EventEnum): enterprises_keywords_mutated
   segments_mutated(event: EventEnum): segments_mutated
   enterprises_mutated(event: EventEnum): enterprises_mutated
+  enterprises_industries_mutated(event: EventEnum): enterprises_industries_mutated
 }
 
 """The `Boolean` scalar type represents `true` or `false`."""
@@ -1676,9 +1677,6 @@ type enterprises {
   """Logo de la empresa"""
   image: ID
 
-  """Industria de la empresa"""
-  industry: String
-
   """URL de LinkedIn"""
   linkedin: String
 
@@ -1703,6 +1701,20 @@ type enterprises {
   locations_func: count_functions
   technologies(filter: enterprises_technologies_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [enterprises_technologies]
   technologies_func: count_functions
+  industries(filter: enterprises_industries_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [enterprises_industries]
+  industries_func: count_functions
+}
+
+type enterprises_industries {
+  id: ID!
+  enterprises_id(filter: enterprises_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): enterprises
+  industries_id(filter: industries_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): industries
+}
+
+type enterprises_industries_mutated {
+  key: ID!
+  event: EventEnum
+  data: enterprises_industries
 }
 
 type enterprises_keywords {
@@ -2981,7 +2993,6 @@ input enterprises_filter {
   facebook: string_filter_operators
   founded_year: string_filter_operators
   image: id_filter_operators
-  industry: string_filter_operators
   linkedin: string_filter_operators
   name: string_filter_operators
   nit: string_filter_operators
@@ -2995,8 +3006,29 @@ input enterprises_filter {
   locations_func: count_function_filter_operators
   technologies: enterprises_technologies_quantifier_filter
   technologies_func: count_function_filter_operators
+  industries: enterprises_industries_quantifier_filter
+  industries_func: count_function_filter_operators
   _and: [enterprises_filter]
   _or: [enterprises_filter]
+}
+
+input enterprises_industries_filter {
+  id: number_filter_operators
+  enterprises_id: enterprises_filter
+  industries_id: industries_filter
+  _and: [enterprises_industries_filter]
+  _or: [enterprises_industries_filter]
+}
+
+""""""
+input enterprises_industries_quantifier_filter {
+  id: number_filter_operators
+  enterprises_id: enterprises_filter
+  industries_id: industries_filter
+  _and: [enterprises_industries_filter]
+  _or: [enterprises_industries_filter]
+  _some: enterprises_industries_filter
+  _none: enterprises_industries_filter
 }
 
 input enterprises_keywords_filter {

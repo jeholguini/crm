@@ -4,7 +4,9 @@
   "description": "--- title: Directus (Docker + extensions + websocket) + PostGIS (Docker & TCP) + S3 description: A one-click-install Directus instance with PostGIS and S3 for persistent storage. tags:   - Directus   - Typescript   - Vue   - Websocket   - CMS   - Data Platform   - PostgreSQL   - PostGIS   - Railway ---",
   "main": "directus-directus-sync.config.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "push-server": "npx directus-sync push --directus-url https://directus-production-9385.up.railway.app/ --directus-token TEklP6C7U6jYXyt1CODk8-mqvOi7ODVI",
+    "pull-server": "npx directus-sync pull --directus-url https://directus-production-9385.up.railway.app/ --directus-token TEklP6C7U6jYXyt1CODk8-mqvOi7ODVI"
   },
   "repository": {
     "type": "git",
