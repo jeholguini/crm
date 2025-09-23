@@ -34,7 +34,7 @@ services:
     # Build from Dockerfile
     build:
       context: .
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     # Or use the latest version available on Docker Hub.
     # image: directus/directus:11
     pull_policy: always
