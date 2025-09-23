@@ -1,0 +1,32 @@
+{
+  "collection": "enterprises",
+  "field": "industries",
+  "type": "alias",
+  "meta": {
+    "collection": "enterprises",
+    "conditions": null,
+    "display": null,
+    "display_options": null,
+    "field": "industries",
+    "group": null,
+    "hidden": false,
+    "interface": "list-m2m",
+    "note": "Sectores o industrias (selección múltiple)",
+    "options": null,
+    "readonly": false,
+    "required": false,
+    "sort": 18,
+    "special": [
+      "m2m"
+    ],
+    "translations": [
+      {
+        "language": "es-ES",
+        "translation": "Sector / industria"
+      }
+    ],
+    "validation": null,
+    "validation_message": null,
+    "width": "full"
+  }
+}

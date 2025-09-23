@@ -1,0 +1,48 @@
+{
+  "collection": "enterprises",
+  "field": "updated_at",
+  "type": "timestamp",
+  "meta": {
+    "collection": "enterprises",
+    "conditions": null,
+    "display": null,
+    "display_options": null,
+    "field": "updated_at",
+    "group": null,
+    "hidden": false,
+    "interface": "datetime",
+    "note": "Fecha de última modificación",
+    "options": null,
+    "readonly": true,
+    "required": false,
+    "sort": 17,
+    "special": null,
+    "translations": [
+      {
+        "language": "es-ES",
+        "translation": "Última actualización"
+      }
+    ],
+    "validation": null,
+    "validation_message": null,
+    "width": "half"
+  },
+  "schema": {
+    "name": "updated_at",
+    "table": "enterprises",
+    "data_type": "timestamp with time zone",
+    "default_value": "CURRENT_TIMESTAMP",
+    "max_length": null,
+    "numeric_precision": null,
+    "numeric_scale": null,
+    "is_nullable": true,
+    "is_unique": false,
+    "is_indexed": false,
+    "is_primary_key": false,
+    "is_generated": false,
+    "generation_expression": null,
+    "has_auto_increment": false,
+    "foreign_key_table": null,
+    "foreign_key_column": null
+  }
+}

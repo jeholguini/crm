@@ -1,0 +1,87 @@
+{
+  "collection": "people",
+  "field": "decision_level",
+  "type": "string",
+  "meta": {
+    "collection": "people",
+    "conditions": null,
+    "display": null,
+    "display_options": null,
+    "field": "decision_level",
+    "group": null,
+    "hidden": false,
+    "interface": "select-dropdown",
+    "note": "Nivel de decisión en la organización",
+    "options": {
+      "choices": [
+        {
+          "text": "C-Level (CEO, CTO, etc.)",
+          "value": "c_level"
+        },
+        {
+          "text": "VP / Vicepresidente",
+          "value": "vp"
+        },
+        {
+          "text": "Director",
+          "value": "director"
+        },
+        {
+          "text": "Gerente / Manager",
+          "value": "manager"
+        },
+        {
+          "text": "Coordinador / Supervisor",
+          "value": "coordinator"
+        },
+        {
+          "text": "Especialista / Analista",
+          "value": "specialist"
+        },
+        {
+          "text": "Asistente / Junior",
+          "value": "assistant"
+        },
+        {
+          "text": "Consultor Externo",
+          "value": "consultant"
+        },
+        {
+          "text": "Otro",
+          "value": "other"
+        }
+      ]
+    },
+    "readonly": false,
+    "required": false,
+    "sort": 10,
+    "special": null,
+    "translations": [
+      {
+        "language": "es-ES",
+        "translation": "Nivel de decisión"
+      }
+    ],
+    "validation": null,
+    "validation_message": null,
+    "width": "half"
+  },
+  "schema": {
+    "name": "decision_level",
+    "table": "people",
+    "data_type": "character varying",
+    "default_value": null,
+    "max_length": 50,
+    "numeric_precision": null,
+    "numeric_scale": null,
+    "is_nullable": true,
+    "is_unique": false,
+    "is_indexed": false,
+    "is_primary_key": false,
+    "is_generated": false,
+    "generation_expression": null,
+    "has_auto_increment": false,
+    "foreign_key_table": null,
+    "foreign_key_column": null
+  }
+}

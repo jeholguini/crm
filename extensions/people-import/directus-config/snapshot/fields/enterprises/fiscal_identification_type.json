@@ -1,0 +1,79 @@
+{
+  "collection": "enterprises",
+  "field": "fiscal_identification_type",
+  "type": "string",
+  "meta": {
+    "collection": "enterprises",
+    "conditions": null,
+    "display": null,
+    "display_options": null,
+    "field": "fiscal_identification_type",
+    "group": null,
+    "hidden": false,
+    "interface": "select-dropdown",
+    "note": "Tipo de documento fiscal",
+    "options": {
+      "choices": [
+        {
+          "text": "NIT (Colombia)",
+          "value": "NIT"
+        },
+        {
+          "text": "RUT (Chile)",
+          "value": "RUT"
+        },
+        {
+          "text": "RUC (Perú)",
+          "value": "RUC"
+        },
+        {
+          "text": "CUIT (Argentina)",
+          "value": "CUIT"
+        },
+        {
+          "text": "CNPJ (Brasil)",
+          "value": "CNPJ"
+        },
+        {
+          "text": "RFC (México)",
+          "value": "RFC"
+        },
+        {
+          "text": "Otro",
+          "value": "OTHER"
+        }
+      ]
+    },
+    "readonly": false,
+    "required": false,
+    "sort": 5,
+    "special": null,
+    "translations": [
+      {
+        "language": "es-ES",
+        "translation": "Tipo de identificación fiscal"
+      }
+    ],
+    "validation": null,
+    "validation_message": null,
+    "width": "half"
+  },
+  "schema": {
+    "name": "fiscal_identification_type",
+    "table": "enterprises",
+    "data_type": "character varying",
+    "default_value": null,
+    "max_length": 50,
+    "numeric_precision": null,
+    "numeric_scale": null,
+    "is_nullable": true,
+    "is_unique": false,
+    "is_indexed": false,
+    "is_primary_key": false,
+    "is_generated": false,
+    "generation_expression": null,
+    "has_auto_increment": false,
+    "foreign_key_table": null,
+    "foreign_key_column": null
+  }
+}

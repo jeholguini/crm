@@ -1,0 +1,75 @@
+{
+  "collection": "enterprises",
+  "field": "company_size",
+  "type": "string",
+  "meta": {
+    "collection": "enterprises",
+    "conditions": null,
+    "display": null,
+    "display_options": null,
+    "field": "company_size",
+    "group": null,
+    "hidden": false,
+    "interface": "select-dropdown",
+    "note": "Rango de empleados",
+    "options": {
+      "choices": [
+        {
+          "text": "1-10 empleados",
+          "value": "1-10"
+        },
+        {
+          "text": "11-50 empleados",
+          "value": "11-50"
+        },
+        {
+          "text": "51-200 empleados",
+          "value": "51-200"
+        },
+        {
+          "text": "201-500 empleados",
+          "value": "201-500"
+        },
+        {
+          "text": "501-1000 empleados",
+          "value": "501-1000"
+        },
+        {
+          "text": "1000+ empleados",
+          "value": "1000+"
+        }
+      ]
+    },
+    "readonly": false,
+    "required": false,
+    "sort": 7,
+    "special": null,
+    "translations": [
+      {
+        "language": "es-ES",
+        "translation": "Tamaño de la empresa"
+      }
+    ],
+    "validation": null,
+    "validation_message": null,
+    "width": "half"
+  },
+  "schema": {
+    "name": "company_size",
+    "table": "enterprises",
+    "data_type": "character varying",
+    "default_value": null,
+    "max_length": 255,
+    "numeric_precision": null,
+    "numeric_scale": null,
+    "is_nullable": true,
+    "is_unique": false,
+    "is_indexed": true,
+    "is_primary_key": false,
+    "is_generated": false,
+    "generation_expression": null,
+    "has_auto_increment": false,
+    "foreign_key_table": null,
+    "foreign_key_column": null
+  }
+}

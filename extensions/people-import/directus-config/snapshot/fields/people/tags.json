@@ -1,0 +1,32 @@
+{
+  "collection": "people",
+  "field": "tags",
+  "type": "alias",
+  "meta": {
+    "collection": "people",
+    "conditions": null,
+    "display": null,
+    "display_options": null,
+    "field": "tags",
+    "group": null,
+    "hidden": false,
+    "interface": "list-m2m",
+    "note": "Etiquetas dinámicas (chips)",
+    "options": null,
+    "readonly": false,
+    "required": false,
+    "sort": 17,
+    "special": [
+      "m2m"
+    ],
+    "translations": [
+      {
+        "language": "es-ES",
+        "translation": "Etiquetas / tags"
+      }
+    ],
+    "validation": null,
+    "validation_message": null,
+    "width": "full"
+  }
+}

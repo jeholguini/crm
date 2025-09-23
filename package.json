@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "docker compose up -d",
-    "push-server": "npx directus-sync push --directus-url https://directus-production-9385.up.railway.app/ --directus-token TEklP6C7U6jYXyt1CODk8-mqvOi7ODVI",
-    "pull-server": "npx directus-sync pull --directus-url https://directus-production-9385.up.railway.app/ --directus-token TEklP6C7U6jYXyt1CODk8-mqvOi7ODVI"
+    "push-server": "npx directus-sync push --directus-url https://directus-production-9385.up.railway.app/ --directus-token Ec6xuIdFEgBgul9pdAfJ9GpPrDTj9b8z",
+    "pull-server": "npx directus-sync pull --directus-url https://directus-production-9385.up.railway.app/ --directus-token Ec6xuIdFEgBgul9pdAfJ9GpPrDTj9b8z"
   },
   "repository": {
     "type": "git",
