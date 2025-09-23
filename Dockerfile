@@ -19,13 +19,19 @@ pnpm install @directus-labs/migration-bundle && \
 pnpm install directus-extension-sync && \
 pnpm install @directus-labs/super-header-interface
 
-# Migrations and Directus schema update
-RUN npx directus bootstrap
 # Copying the extensions, templates, migrations, and snapshots to the Directus container
 COPY ./extensions /directus/extensions
 COPY ./templates /directus/templates
 COPY ./migrations /directus/migrations
-COPY ./config.cjs /directus/config.cjs           
+COPY ./config.cjs /directus/config.cjs
+
+# Build custom extensions
+WORKDIR /directus/extensions/people-import
+RUN npm ci && npm run build
+WORKDIR /directus
+
+# Migrations and Directus schema update
+RUN npx directus bootstrap           
 
 # Custom entrypoint script to run Directus on Railway for migrations, snapshots, and extensions
 COPY entrypoint.sh /directus/entrypoint.sh
