@@ -11,26 +11,16 @@ RUN npm install -g pnpm --force
 
 USER node
 
-# Copy and build our custom extension first
-USER root
-COPY ./extensions/people-import /tmp/people-import
-RUN chown -R node:node /tmp/people-import
-USER node
-
-WORKDIR /tmp/people-import
-RUN npm ci && npm run build && npm pack
-
 # Installing contributed/custom extensions through npm on Railway
-WORKDIR /directus
 RUN pnpm install directus-extension-computed-interface && pnpm install directus-extension-upsert && \
 pnpm install directus-extension-wpslug-interface && pnpm install pg && \
 pnpm install directus-extension-flexible-editor && pnpm install @directus-labs/simple-list-interface && \
 pnpm install @directus-labs/migration-bundle && \
 pnpm install directus-extension-sync && \
-pnpm install @directus-labs/super-header-interface && \
-pnpm install /tmp/people-import/people-import-1.0.0.tgz
+pnpm install @directus-labs/super-header-interface
 
-# Copying templates, migrations, and config to the Directus container
+# Copying the extensions, templates, migrations, and snapshots to the Directus container
+COPY ./extensions /directus/extensions
 COPY ./templates /directus/templates
 COPY ./migrations /directus/migrations
 COPY ./config.cjs /directus/config.cjs
