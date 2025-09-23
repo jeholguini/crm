@@ -25,11 +25,6 @@ COPY ./templates /directus/templates
 COPY ./migrations /directus/migrations
 COPY ./config.cjs /directus/config.cjs
 
-# Build custom extensions
-WORKDIR /directus/extensions/people-import
-RUN npm ci && npm run build
-WORKDIR /directus
-
 # Migrations and Directus schema update
 RUN npx directus bootstrap           
 
