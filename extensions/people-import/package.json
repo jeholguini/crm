@@ -1,0 +1,28 @@
+{
+  "name": "people-import",
+  "version": "1.0.0",
+  "keywords": [
+    "directus",
+    "directus-extension",
+    "directus-endpoint"
+  ],
+  "directus:extension": {
+    "type": "endpoint",
+    "path": "dist/index.js",
+    "source": "src/index.ts",
+    "host": "^10.0.0"
+  },
+  "scripts": {
+    "build": "directus-extension build",
+    "dev": "directus-extension build -w --no-minify"
+  },
+  "dependencies": {
+    "multer": "^1.4.5-lts.1"
+  },
+  "devDependencies": {
+    "@directus/extensions-sdk": "12.0.2",
+    "@types/node": "^22.5.4",
+    "@types/multer": "^1.4.7",
+    "typescript": "^5.6.2"
+  }
+}

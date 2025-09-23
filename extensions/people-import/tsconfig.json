@@ -1,0 +1,3 @@
+{
+  "extends": "@directus/extensions-sdk/dist/esm/config/tsconfig.json"
+}
