@@ -1,18 +1,64 @@
-export default (router, { services, database }) => {
+const multer = require('multer');
+
+const upload = multer({ storage: multer.memoryStorage() });
+
+module.exports = (router, { services, getSchema }) => {
   const { ItemsService } = services;
 
-  // Endpoint para importar CSV
-  router.post('/people-import', async (req, res) => {
+  // Función para parsear líneas CSV
+  function parseCSVLine(line) {
+    const values = [];
+    let current = '';
+    let inQuotes = false;
+
+    for (let i = 0; i < line.length; i++) {
+      const char = line[i];
+      const nextChar = line[i + 1];
+
+      if (char === '"' && !inQuotes) {
+        inQuotes = true;
+      } else if (char === '"' && inQuotes && nextChar === '"') {
+        current += '"';
+        i++;
+      } else if (char === '"' && inQuotes) {
+        inQuotes = false;
+      } else if (char === ',' && !inQuotes) {
+        values.push(current.trim());
+        current = '';
+      } else {
+        current += char;
+      }
+    }
+    values.push(current.trim());
+    return values;
+  }
+
+  // Endpoint de prueba
+  router.get('/test', (req, res) => {
+    res.json({
+      success: true,
+      message: 'Extensión de importación funcionando',
+      timestamp: new Date().toISOString(),
+      routes: [
+        'GET /test - Prueba de conectividad',
+        'POST /enterprises - Importar CSV de empresas (Pipedrive)',
+        'POST /people - Importar CSV de personas (formato personalizado)'
+      ]
+    });
+  });
+
+  // Endpoint para importar empresas (CSV Pipedrive)
+  router.post('/enterprises', upload.single('file'), async (req, res) => {
     try {
-      // Verificar que se recibió contenido
-      if (!req.body || !req.body.csvData) {
+      // Verificar archivo
+      if (!req.file) {
         return res.status(400).json({
           success: false,
-          error: 'No se proporcionó datos CSV'
+          error: 'No se proporcionó archivo CSV'
         });
       }
 
-      const csvData = req.body.csvData;
+      const csvData = req.file.buffer.toString('utf-8');
       const lines = csvData.split('\n').filter(line => line.trim());
 
       if (lines.length < 2) {
@@ -22,8 +68,159 @@ export default (router, { services, database }) => {
         });
       }
 
-      // Obtener esquema para servicios
-      const schema = req.schema;
+      // Obtener esquema
+      const schema = await getSchema();
+
+      // Servicios
+      const enterprisesService = new ItemsService('enterprises', {
+        schema,
+        accountability: req.accountability
+      });
+
+      const results = [];
+      const errors = [];
+
+      // Procesar header
+      const headers = parseCSVLine(lines[0]);
+
+      // Mapeo de campos
+      const fieldMapping = {};
+      headers.forEach((header, index) => {
+        switch (header.toLowerCase()) {
+          case 'name':
+            fieldMapping.organization_name = index;
+            break;
+          case 'address':
+            fieldMapping.normalized_address = index;
+            break;
+          case 'owner_name':
+            fieldMapping.internal_owner = index;
+            break;
+          case 'company_id':
+            fieldMapping.fiscal_identification = index;
+            break;
+          case 'label':
+            fieldMapping.commercial_name = index;
+            break;
+        }
+      });
+
+      // Procesar cada fila
+      for (let i = 1; i < lines.length; i++) {
+        try {
+          const values = parseCSVLine(lines[i]);
+
+          const organizationName = fieldMapping.organization_name !== undefined
+            ? values[fieldMapping.organization_name]
+            : null;
+
+          if (!organizationName || organizationName.trim() === '') {
+            errors.push({
+              row: i + 1,
+              error: 'Nombre de organización requerido'
+            });
+            continue;
+          }
+
+          // Verificar si existe
+          const existing = await enterprisesService.readByQuery({
+            filter: { organization_name: { _eq: organizationName.trim() } },
+            limit: 1,
+            fields: ['id', 'organization_name']
+          });
+
+          if (existing && existing.length > 0) {
+            results.push({
+              row: i + 1,
+              organization_name: organizationName,
+              status: 'exists',
+              id: existing[0].id
+            });
+            continue;
+          }
+
+          // Crear nueva empresa
+          const enterpriseData = {
+            organization_name: organizationName.trim(),
+            acquisition_source: 'other',
+            notes: 'Importado desde CSV Pipedrive'
+          };
+
+          // Agregar campos opcionales
+          if (fieldMapping.normalized_address !== undefined && values[fieldMapping.normalized_address]) {
+            enterpriseData.normalized_address = values[fieldMapping.normalized_address].trim();
+          }
+          if (fieldMapping.internal_owner !== undefined && values[fieldMapping.internal_owner]) {
+            enterpriseData.internal_owner = values[fieldMapping.internal_owner].trim();
+          }
+          if (fieldMapping.fiscal_identification !== undefined && values[fieldMapping.fiscal_identification]) {
+            enterpriseData.fiscal_identification = values[fieldMapping.fiscal_identification].trim();
+          }
+          if (fieldMapping.commercial_name !== undefined && values[fieldMapping.commercial_name]) {
+            enterpriseData.commercial_name = values[fieldMapping.commercial_name].trim();
+          }
+
+          const newEnterprise = await enterprisesService.createOne(enterpriseData);
+
+          results.push({
+            row: i + 1,
+            organization_name: organizationName,
+            status: 'created',
+            id: newEnterprise
+          });
+
+        } catch (error) {
+          errors.push({
+            row: i + 1,
+            error: error.message
+          });
+        }
+      }
+
+      res.json({
+        success: true,
+        message: `Importación completada. ${results.length} empresas procesadas.`,
+        data: {
+          processed: lines.length - 1,
+          successful: results.length,
+          errors: errors.length,
+          results: results,
+          errorDetails: errors
+        }
+      });
+
+    } catch (error) {
+      console.error('Error en importación:', error);
+      res.status(500).json({
+        success: false,
+        error: error.message
+      });
+    }
+  });
+
+  // Endpoint para importar personas (formato personalizado)
+  router.post('/people', upload.single('file'), async (req, res) => {
+    try {
+      // Verificar archivo
+      if (!req.file) {
+        return res.status(400).json({
+          success: false,
+          error: 'No se proporcionó archivo CSV'
+        });
+      }
+
+      const csvData = req.file.buffer.toString('utf-8');
+      const lines = csvData.split('\n').filter(line => line.trim());
+
+      if (lines.length < 2) {
+        return res.status(400).json({
+          success: false,
+          error: 'El CSV debe tener al menos una fila de datos'
+        });
+      }
+
+      // Obtener esquema
+      const schema = await getSchema();
 
       // Servicios para cada colección
       const peopleService = new ItemsService('people', { schema, accountability: req.accountability });
@@ -68,18 +265,19 @@ export default (router, { services, database }) => {
       }
 
       // Procesar cada línea del CSV (saltando el header)
+      // Formato esperado: nit,nombre,telefono,email,industria,linkedin,fundacion,ubicaciones,keywords,tecnologias
       for (let i = 1; i < lines.length; i++) {
         try {
           const line = lines[i];
           if (!line.trim()) continue;
 
-          // Parsear CSV simple (asumiendo comas como separador)
-          const values = line.split(',').map(v => v.trim().replace(/^"(.*)"$/, '$1'));
+          // Parsear CSV
+          const values = parseCSVLine(line);
 
           if (values.length < 10) {
             errors.push({
               row: i + 1,
-              error: 'Fila incompleta, se esperan 10 columnas'
+              error: 'Fila incompleta, se esperan 10 columnas: nit,nombre,telefono,email,industria,linkedin,fundacion,ubicaciones,keywords,tecnologias'
             });
             continue;
           }
@@ -90,8 +288,9 @@ export default (router, { services, database }) => {
           let enterpriseId = null;
           if (nit && nombre) {
             const existingEnterprise = await enterprisesService.readByQuery({
-              filter: { nit: { _eq: nit } },
-              limit: 1
+              filter: { fiscal_identification: { _eq: nit } },
+              limit: 1,
+              fields: ['id', 'organization_name']
             });
 
             if (existingEnterprise && existingEnterprise.length > 0) {
@@ -99,12 +298,10 @@ export default (router, { services, database }) => {
             } else {
               // Crear nueva empresa
               const enterpriseData = {
-                nit: nit,
-                name: nombre,
-                phone: telefono || null,
-                email: email || null,
-                linkedin: linkedin || null,
-                founded_year: fundacion || null
+                organization_name: nombre,
+                fiscal_identification: nit,
+                website: linkedin || null,
+                notes: `Año fundación: ${fundacion || 'N/A'}`
               };
 
               // Filtrar campos vacíos
@@ -176,8 +373,17 @@ export default (router, { services, database }) => {
 
           // 2. Crear persona
           const personData = {
-            name: nombre
+            name: nombre,
+            email: email || null,
+            phone: telefono || null
           };
+
+          // Filtrar campos vacíos
+          Object.keys(personData).forEach(key => {
+            if (personData[key] === null || personData[key] === undefined || personData[key] === '') {
+              delete personData[key];
+            }
+          });
 
           const newPerson = await peopleService.createOne(personData);
 
@@ -209,7 +415,7 @@ export default (router, { services, database }) => {
       // Respuesta
       res.json({
         success: true,
-        message: `Importación completada. ${results.length} registros procesados.`,
+        message: `Importación de personas completada. ${results.length} registros procesados.`,
         data: {
           processed: lines.length - 1,
           successful: results.length,
@@ -220,35 +426,11 @@ export default (router, { services, database }) => {
       });
 
     } catch (error) {
-      console.error('Error en importación:', error);
+      console.error('Error en importación de personas:', error);
       res.status(500).json({
         success: false,
         error: error.message
       });
     }
-  });
-
-  // Endpoint para obtener template CSV
-  router.get('/people-import/template', (req, res) => {
-    const template = [
-      'nit,nombre,telefono,email,industria,linkedin,fundacion,ubicaciones,keywords,tecnologias',
-      '123456789,TechCorp,+57601234567,info@techcorp.com,Tecnología,linkedin.com/company/techcorp,2010,Bogotá,software development,PHP;Laravel;React'
-    ].join('\n');
-
-    res.setHeader('Content-Type', 'text/csv');
-    res.setHeader('Content-Disposition', 'attachment; filename="people-import-template.csv"');
-    res.send(template);
-  });
-
-  // Endpoint de prueba
-  router.get('/people-import/test', (req, res) => {
-    res.json({
-      message: 'Endpoint de importación de personas funcionando',
-      endpoints: [
-        'POST /people-import - Importar CSV',
-        'GET /people-import/template - Descargar template',
-        'GET /people-import/test - Prueba'
-      ]
-    });
   });
 };

@@ -9,7 +9,7 @@
   "directus:extension": {
     "type": "endpoint",
     "path": "dist/index.js",
-    "source": "src/index.ts",
+    "source": "src/index.js",
     "host": "^10.0.0"
   },
   "scripts": {
@@ -21,8 +21,8 @@
   },
   "devDependencies": {
     "@directus/extensions-sdk": "12.0.2",
+    "@types/multer": "^1.4.13",
     "@types/node": "^22.5.4",
-    "@types/multer": "^1.4.7",
     "typescript": "^5.6.2"
   }
 }
