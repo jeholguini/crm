@@ -2,7 +2,7 @@ const multer = require('multer');
 
 const upload = multer({ storage: multer.memoryStorage() });
 
-module.exports = (router, { services, getSchema }) => {
+module.exports = (router, { services, getSchema, database }) => {
   const { ItemsService } = services;
 
   // Función para parsear líneas CSV
@@ -42,9 +42,40 @@ module.exports = (router, { services, getSchema }) => {
       routes: [
         'GET /test - Prueba de conectividad',
         'POST /enterprises - Importar CSV de empresas (Pipedrive)',
-        'POST /people - Importar CSV de personas (formato Pipedrive)'
+        'POST /people - Importar CSV de personas (formato Pipedrive)',
+        'POST /migrate - Ejecutar migración SQL (temporal)'
       ]
     });
+  });
+
+  // Endpoint temporal para ejecutar migraciones SQL
+  router.post('/migrate', async (req, res) => {
+    try {
+      const { sql } = req.body;
+
+      if (!sql) {
+        return res.status(400).json({
+          success: false,
+          error: 'SQL query required'
+        });
+      }
+
+      // Ejecutar SQL
+      const result = await database.raw(sql);
+
+      res.json({
+        success: true,
+        message: 'SQL executed successfully',
+        result: result
+      });
+
+    } catch (error) {
+      console.error('Error ejecutando SQL:', error);
+      res.status(500).json({
+        success: false,
+        error: error.message
+      });
+    }
   });
 
   // Endpoint para importar empresas (CSV Pipedrive)
