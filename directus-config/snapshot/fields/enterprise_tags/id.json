@@ -1,9 +1,9 @@
 {
-  "collection": "enterprises",
+  "collection": "enterprise_tags",
   "field": "id",
   "type": "integer",
   "meta": {
-    "collection": "enterprises",
+    "collection": "enterprise_tags",
     "conditions": null,
     "display": null,
     "display_options": null,
@@ -20,7 +20,7 @@
     "translations": [
       {
         "language": "es-ES",
-        "translation": "ID interno"
+        "translation": "ID"
       }
     ],
     "validation": null,
@@ -29,9 +29,9 @@
   },
   "schema": {
     "name": "id",
-    "table": "enterprises",
+    "table": "enterprise_tags",
     "data_type": "integer",
-    "default_value": "nextval('enterprises_id_seq'::regclass)",
+    "default_value": "nextval('enterprise_tags_id_seq'::regclass)",
     "max_length": null,
     "numeric_precision": 32,
     "numeric_scale": 0,

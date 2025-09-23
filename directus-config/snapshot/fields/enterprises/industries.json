@@ -11,15 +11,20 @@
     "group": null,
     "hidden": false,
     "interface": "list-m2m",
-    "note": null,
+    "note": "Sectores o industrias (selección múltiple)",
     "options": null,
     "readonly": false,
     "required": false,
-    "sort": 20,
+    "sort": 18,
     "special": [
       "m2m"
     ],
-    "translations": null,
+    "translations": [
+      {
+        "language": "es-ES",
+        "translation": "Sector / industria"
+      }
+    ],
     "validation": null,
     "validation_message": null,
     "width": "full"

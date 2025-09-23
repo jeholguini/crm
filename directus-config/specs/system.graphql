@@ -276,8 +276,10 @@ type Subscription {
   people_keywords_mutated(event: EventEnum): people_keywords_mutated
   enterprises_keywords_mutated(event: EventEnum): enterprises_keywords_mutated
   segments_mutated(event: EventEnum): segments_mutated
-  enterprises_mutated(event: EventEnum): enterprises_mutated
+  enterprises_tags_mutated(event: EventEnum): enterprises_tags_mutated
+  enterprise_tags_mutated(event: EventEnum): enterprise_tags_mutated
   enterprises_industries_mutated(event: EventEnum): enterprises_industries_mutated
+  enterprises_mutated(event: EventEnum): enterprises_mutated
 }
 
 """The `Boolean` scalar type represents `true` or `false`."""
@@ -1649,60 +1651,81 @@ type directus_webhooks_mutated {
   data: directus_webhooks
 }
 
-type enterprises {
+type enterprise_tags {
+  """ID autogenerado"""
   id: ID!
 
-  """Descripción de la empresa"""
-  about: String
+  """Nombre de la etiqueta"""
+  name: String!
+  color: String
+  created_at: Date
+  created_at_func: datetime_functions
+}
 
-  """Ingresos anuales"""
-  annual_revenue: String
+type enterprise_tags_mutated {
+  key: ID!
+  event: EventEnum
+  data: enterprise_tags
+}
 
-  """Fecha de creación"""
+type enterprises {
+  """ID autogenerado"""
+  id: ID!
+
+  """Notas adicionales"""
+  notes: String
+
+  """Fecha de creación automática"""
   created_at: Date
   created_at_func: datetime_functions
 
-  """Email de la empresa"""
-  email: String
+  """Rango de empleados"""
+  company_size: String
 
-  """Número de empleados"""
-  employs: String
-
-  """URL de Facebook"""
-  facebook: String
-
-  """Año de fundación"""
-  founded_year: String
-
-  """Logo de la empresa"""
-  image: ID
-
-  """URL de LinkedIn"""
+  """URL del perfil de LinkedIn"""
   linkedin: String
 
-  """Nombre de la empresa"""
-  name: String!
+  """Nombre oficial de la empresa (obligatorio)"""
+  organization_name: String!
 
-  """NIT de la empresa"""
-  nit: String
+  """Número de identificación fiscal"""
+  fiscal_identification: String
 
-  """Teléfono de la empresa"""
-  phone: String
-
-  """URL de Twitter"""
-  twitter: String
-
-  """Fecha de última actualización"""
+  """Fecha de última modificación"""
   updated_at: Date
   updated_at_func: datetime_functions
-  keywords(filter: enterprises_keywords_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [enterprises_keywords]
-  keywords_func: count_functions
-  locations(filter: enterprises_locations_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [enterprises_locations]
-  locations_func: count_functions
-  technologies(filter: enterprises_technologies_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [enterprises_technologies]
-  technologies_func: count_functions
+
+  """Nombre comercial o marca"""
+  commercial_name: String
+
+  """Tipo de documento fiscal"""
+  fiscal_identification_type: String
+
+  """País de la empresa (ISO-3166)"""
+  country: String
+
+  """Dirección con autocompletado Mapbox"""
+  normalized_address: String
+
+  """URL del sitio web"""
+  website: String
+
+  """Prefijo telefónico (+E.164)"""
+  phone_prefix: String
+
+  """Número telefónico"""
+  phone_number: String
+
+  """Cómo se adquirió el lead"""
+  acquisition_source: String
+
+  """Responsable interno"""
+  internal_owner: String
   industries(filter: enterprises_industries_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [enterprises_industries]
   industries_func: count_functions
+  keywords(filter: enterprises_keywords_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [enterprises_keywords]
+  technologies(filter: enterprises_technologies_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [enterprises_technologies]
+  locations(filter: enterprises_locations_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [enterprises_locations]
 }
 
 type enterprises_industries {
@@ -1745,6 +1768,21 @@ type enterprises_mutated {
   key: ID!
   event: EventEnum
   data: enterprises
+}
+
+type enterprises_tags {
+  id: ID!
+  enterprise_id(filter: enterprises_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): enterprises
+  tag_id(filter: enterprise_tags_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): enterprise_tags
+  created_at: Date
+  created_at_func: datetime_functions
+  enterprises_id(filter: enterprises_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): enterprises
+}
+
+type enterprises_tags_mutated {
+  key: ID!
+  event: EventEnum
+  data: enterprises_tags
 }
 
 type enterprises_technologies {
@@ -2982,34 +3020,43 @@ input directus_webhooks_filter {
   _or: [directus_webhooks_filter]
 }
 
-input enterprises_filter {
+input enterprise_tags_filter {
   id: number_filter_operators
-  about: string_filter_operators
-  annual_revenue: string_filter_operators
+  name: string_filter_operators
+  color: string_filter_operators
   created_at: date_filter_operators
   created_at_func: datetime_function_filter_operators
-  email: string_filter_operators
-  employs: string_filter_operators
-  facebook: string_filter_operators
-  founded_year: string_filter_operators
-  image: id_filter_operators
+  _and: [enterprise_tags_filter]
+  _or: [enterprise_tags_filter]
+}
+
+input enterprises_filter {
+  id: number_filter_operators
+  notes: string_filter_operators
+  created_at: date_filter_operators
+  created_at_func: datetime_function_filter_operators
+  company_size: string_filter_operators
   linkedin: string_filter_operators
-  name: string_filter_operators
-  nit: string_filter_operators
-  phone: string_filter_operators
-  twitter: string_filter_operators
+  organization_name: string_filter_operators
+  fiscal_identification: string_filter_operators
   updated_at: date_filter_operators
   updated_at_func: datetime_function_filter_operators
-  keywords: enterprises_keywords_quantifier_filter
-  keywords_func: count_function_filter_operators
-  locations: enterprises_locations_quantifier_filter
-  locations_func: count_function_filter_operators
-  technologies: enterprises_technologies_quantifier_filter
-  technologies_func: count_function_filter_operators
+  commercial_name: string_filter_operators
+  fiscal_identification_type: string_filter_operators
+  country: string_filter_operators
+  normalized_address: string_filter_operators
+  website: string_filter_operators
+  phone_prefix: string_filter_operators
+  phone_number: string_filter_operators
+  acquisition_source: string_filter_operators
+  internal_owner: string_filter_operators
   industries: enterprises_industries_quantifier_filter
   industries_func: count_function_filter_operators
   _and: [enterprises_filter]
   _or: [enterprises_filter]
+  keywords: enterprises_keywords_quantifier_filter
+  technologies: enterprises_technologies_quantifier_filter
+  locations: enterprises_locations_quantifier_filter
 }
 
 input enterprises_industries_filter {

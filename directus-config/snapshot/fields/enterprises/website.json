@@ -1,33 +1,38 @@
 {
   "collection": "enterprises",
-  "field": "nit",
+  "field": "website",
   "type": "string",
   "meta": {
     "collection": "enterprises",
     "conditions": null,
-    "display": "raw",
+    "display": null,
     "display_options": null,
-    "field": "nit",
+    "field": "website",
     "group": null,
     "hidden": false,
     "interface": "input",
-    "note": "NIT de la empresa",
+    "note": "URL del sitio web",
     "options": null,
     "readonly": false,
     "required": false,
-    "sort": 2,
+    "sort": 10,
     "special": null,
-    "translations": null,
+    "translations": [
+      {
+        "language": "es-ES",
+        "translation": "Sitio web"
+      }
+    ],
     "validation": null,
     "validation_message": null,
     "width": "half"
   },
   "schema": {
-    "name": "nit",
+    "name": "website",
     "table": "enterprises",
     "data_type": "character varying",
     "default_value": null,
-    "max_length": 255,
+    "max_length": 500,
     "numeric_precision": null,
     "numeric_scale": null,
     "is_nullable": true,

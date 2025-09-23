@@ -3,7 +3,7 @@
   "info": {
     "title": "Dynamic API Specification",
     "description": "This is a dynamically generated API specification for all endpoints existing on the current project.",
-    "version": "413410637c22a1a6c90611df8c68835538e817d3"
+    "version": "6de5f8a07a696ef1db77ec42d9dd2c57ee7d512f"
   },
   "servers": [
     {
@@ -12957,15 +12957,15 @@
         ]
       }
     },
-    "/items/enterprises": {
+    "/items/enterprises_tags": {
       "post": {
         "summary": "Create an Item",
-        "description": "Create a new enterprises item.",
+        "description": "Create a new enterprises_tags item.",
         "tags": [
           "Items",
-          "ItemsEnterprises"
+          "ItemsEnterprisesTags"
         ],
-        "operationId": "createItemsEnterprises",
+        "operationId": "createItemsEnterprisesTags",
         "parameters": [
           {
             "$ref": "#/components/parameters/Meta"
@@ -12979,11 +12979,11 @@
                   {
                     "type": "array",
                     "items": {
-                      "$ref": "#/components/schemas/ItemsEnterprises"
+                      "$ref": "#/components/schemas/ItemsEnterprisesTags"
                     }
                   },
                   {
-                    "$ref": "#/components/schemas/ItemsEnterprises"
+                    "$ref": "#/components/schemas/ItemsEnterprisesTags"
                   }
                 ]
               }
@@ -13001,7 +13001,7 @@
                     "data": {
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/ItemsEnterprises"
+                        "$ref": "#/components/schemas/ItemsEnterprisesTags"
                       }
                     }
                   }
@@ -13016,12 +13016,12 @@
       },
       "get": {
         "summary": "List Items",
-        "description": "List the enterprises items.",
+        "description": "List the enterprises_tags items.",
         "tags": [
           "Items",
-          "ItemsEnterprises"
+          "ItemsEnterprisesTags"
         ],
-        "operationId": "readItemsEnterprises",
+        "operationId": "readItemsEnterprisesTags",
         "security": [
           {
             "Auth": []
@@ -13062,7 +13062,7 @@
                       "type": "array",
                       "items": {
                         "type": "object",
-                        "$ref": "#/components/schemas/ItemsEnterprises"
+                        "$ref": "#/components/schemas/ItemsEnterprisesTags"
                       }
                     },
                     "meta": {
@@ -13080,12 +13080,12 @@
       },
       "patch": {
         "summary": "Update Multiple Items",
-        "description": "Update multiple enterprises items at the same time.",
+        "description": "Update multiple enterprises_tags items at the same time.",
         "tags": [
           "Items",
-          "ItemsEnterprises"
+          "ItemsEnterprisesTags"
         ],
-        "operationId": "updateItemsEnterprises",
+        "operationId": "updateItemsEnterprisesTags",
         "parameters": [
           {
             "$ref": "#/components/parameters/Fields"
@@ -13117,11 +13117,11 @@
                   {
                     "type": "array",
                     "items": {
-                      "$ref": "#/components/schemas/ItemsEnterprises"
+                      "$ref": "#/components/schemas/ItemsEnterprisesTags"
                     }
                   },
                   {
-                    "$ref": "#/components/schemas/ItemsEnterprises"
+                    "$ref": "#/components/schemas/ItemsEnterprisesTags"
                   }
                 ]
               }
@@ -13138,7 +13138,7 @@
                     "data": {
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/ItemsEnterprises"
+                        "$ref": "#/components/schemas/ItemsEnterprisesTags"
                       }
                     }
                   }
@@ -13150,12 +13150,12 @@
       },
       "delete": {
         "summary": "Delete Multiple Items",
-        "description": "Delete multiple existing enterprises items.",
+        "description": "Delete multiple existing enterprises_tags items.",
         "tags": [
           "Items",
-          "ItemsEnterprises"
+          "ItemsEnterprisesTags"
         ],
-        "operationId": "deleteItemsEnterprises",
+        "operationId": "deleteItemsEnterprisesTags",
         "responses": {
           "200": {
             "description": "Successful request"
@@ -13167,15 +13167,15 @@
         "parameters": []
       }
     },
-    "/items/enterprises/{id}": {
+    "/items/enterprises_tags/{id}": {
       "get": {
         "summary": "Retrieve an Item",
-        "description": "Retrieve a single enterprises item by unique identifier.",
+        "description": "Retrieve a single enterprises_tags item by unique identifier.",
         "tags": [
           "Items",
-          "ItemsEnterprises"
+          "ItemsEnterprisesTags"
         ],
-        "operationId": "readSingleItemsEnterprises",
+        "operationId": "readSingleItemsEnterprisesTags",
         "parameters": [
           {
             "$ref": "#/components/parameters/Fields"
@@ -13217,7 +13217,7 @@
                   "properties": {
                     "data": {
                       "type": "object",
-                      "$ref": "#/components/schemas/ItemsEnterprises"
+                      "$ref": "#/components/schemas/ItemsEnterprisesTags"
                     }
                   }
                 }
@@ -13234,12 +13234,12 @@
       },
       "patch": {
         "summary": "Update an Item",
-        "description": "Update an existing enterprises item.",
+        "description": "Update an existing enterprises_tags item.",
         "tags": [
           "Items",
-          "ItemsEnterprises"
+          "ItemsEnterprisesTags"
         ],
-        "operationId": "updateSingleItemsEnterprises",
+        "operationId": "updateSingleItemsEnterprisesTags",
         "parameters": [
           {
             "$ref": "#/components/parameters/Fields"
@@ -13273,7 +13273,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "$ref": "#/components/schemas/ItemsEnterprises"
+                "$ref": "#/components/schemas/ItemsEnterprisesTags"
               }
             }
           }
@@ -13288,7 +13288,7 @@
                   "properties": {
                     "data": {
                       "type": "object",
-                      "$ref": "#/components/schemas/ItemsEnterprises"
+                      "$ref": "#/components/schemas/ItemsEnterprisesTags"
                     }
                   }
                 }
@@ -13305,12 +13305,401 @@
       },
       "delete": {
         "summary": "Delete an Item",
-        "description": "Delete an existing enterprises item.",
+        "description": "Delete an existing enterprises_tags item.",
         "tags": [
           "Items",
-          "ItemsEnterprises"
+          "ItemsEnterprisesTags"
         ],
-        "operationId": "deleteSingleItemsEnterprises",
+        "operationId": "deleteSingleItemsEnterprisesTags",
+        "responses": {
+          "200": {
+            "description": "Successful request"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Index of the item.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer",
+                  "description": "Incremental index of the item.",
+                  "example": 1
+                },
+                {
+                  "type": "string",
+                  "description": "Unique identifier of the item.",
+                  "example": "8cbb43fe-4cdf-4991-8352-c461779cec02"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "/items/enterprise_tags": {
+      "post": {
+        "summary": "Create an Item",
+        "description": "Create a new enterprise_tags item.",
+        "tags": [
+          "Items",
+          "ItemsEnterpriseTags"
+        ],
+        "operationId": "createItemsEnterpriseTags",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Meta"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/ItemsEnterpriseTags"
+                    }
+                  },
+                  {
+                    "$ref": "#/components/schemas/ItemsEnterpriseTags"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ItemsEnterpriseTags"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      },
+      "get": {
+        "summary": "List Items",
+        "description": "List the enterprise_tags items.",
+        "tags": [
+          "Items",
+          "ItemsEnterpriseTags"
+        ],
+        "operationId": "readItemsEnterpriseTags",
+        "security": [
+          {
+            "Auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Fields"
+          },
+          {
+            "$ref": "#/components/parameters/Limit"
+          },
+          {
+            "$ref": "#/components/parameters/Meta"
+          },
+          {
+            "$ref": "#/components/parameters/Offset"
+          },
+          {
+            "$ref": "#/components/parameters/Sort"
+          },
+          {
+            "$ref": "#/components/parameters/Filter"
+          },
+          {
+            "$ref": "#/components/parameters/Search"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "$ref": "#/components/schemas/ItemsEnterpriseTags"
+                      }
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/x-metadata"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update Multiple Items",
+        "description": "Update multiple enterprise_tags items at the same time.",
+        "tags": [
+          "Items",
+          "ItemsEnterpriseTags"
+        ],
+        "operationId": "updateItemsEnterpriseTags",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Fields"
+          },
+          {
+            "$ref": "#/components/parameters/Limit"
+          },
+          {
+            "$ref": "#/components/parameters/Meta"
+          },
+          {
+            "$ref": "#/components/parameters/Offset"
+          },
+          {
+            "$ref": "#/components/parameters/Sort"
+          },
+          {
+            "$ref": "#/components/parameters/Filter"
+          },
+          {
+            "$ref": "#/components/parameters/Search"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/ItemsEnterpriseTags"
+                    }
+                  },
+                  {
+                    "$ref": "#/components/schemas/ItemsEnterpriseTags"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ItemsEnterpriseTags"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Multiple Items",
+        "description": "Delete multiple existing enterprise_tags items.",
+        "tags": [
+          "Items",
+          "ItemsEnterpriseTags"
+        ],
+        "operationId": "deleteItemsEnterpriseTags",
+        "responses": {
+          "200": {
+            "description": "Successful request"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        },
+        "parameters": []
+      }
+    },
+    "/items/enterprise_tags/{id}": {
+      "get": {
+        "summary": "Retrieve an Item",
+        "description": "Retrieve a single enterprise_tags item by unique identifier.",
+        "tags": [
+          "Items",
+          "ItemsEnterpriseTags"
+        ],
+        "operationId": "readSingleItemsEnterpriseTags",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Fields"
+          },
+          {
+            "$ref": "#/components/parameters/Meta"
+          },
+          {
+            "$ref": "#/components/parameters/Version"
+          },
+          {
+            "name": "id",
+            "description": "Index of the item.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer",
+                  "description": "Incremental index of the item.",
+                  "example": 1
+                },
+                {
+                  "type": "string",
+                  "description": "Unique identifier of the item.",
+                  "example": "8cbb43fe-4cdf-4991-8352-c461779cec02"
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/ItemsEnterpriseTags"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update an Item",
+        "description": "Update an existing enterprise_tags item.",
+        "tags": [
+          "Items",
+          "ItemsEnterpriseTags"
+        ],
+        "operationId": "updateSingleItemsEnterpriseTags",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Fields"
+          },
+          {
+            "$ref": "#/components/parameters/Meta"
+          },
+          {
+            "name": "id",
+            "description": "Index of the item.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer",
+                  "description": "Incremental index of the item.",
+                  "example": 1
+                },
+                {
+                  "type": "string",
+                  "description": "Unique identifier of the item.",
+                  "example": "8cbb43fe-4cdf-4991-8352-c461779cec02"
+                }
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "$ref": "#/components/schemas/ItemsEnterpriseTags"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/ItemsEnterpriseTags"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete an Item",
+        "description": "Delete an existing enterprise_tags item.",
+        "tags": [
+          "Items",
+          "ItemsEnterpriseTags"
+        ],
+        "operationId": "deleteSingleItemsEnterpriseTags",
         "responses": {
           "200": {
             "description": "Successful request"
@@ -13734,6 +14123,395 @@
           }
         ]
       }
+    },
+    "/items/enterprises": {
+      "post": {
+        "summary": "Create an Item",
+        "description": "Create a new enterprises item.",
+        "tags": [
+          "Items",
+          "ItemsEnterprises"
+        ],
+        "operationId": "createItemsEnterprises",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Meta"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/ItemsEnterprises"
+                    }
+                  },
+                  {
+                    "$ref": "#/components/schemas/ItemsEnterprises"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ItemsEnterprises"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      },
+      "get": {
+        "summary": "List Items",
+        "description": "List the enterprises items.",
+        "tags": [
+          "Items",
+          "ItemsEnterprises"
+        ],
+        "operationId": "readItemsEnterprises",
+        "security": [
+          {
+            "Auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Fields"
+          },
+          {
+            "$ref": "#/components/parameters/Limit"
+          },
+          {
+            "$ref": "#/components/parameters/Meta"
+          },
+          {
+            "$ref": "#/components/parameters/Offset"
+          },
+          {
+            "$ref": "#/components/parameters/Sort"
+          },
+          {
+            "$ref": "#/components/parameters/Filter"
+          },
+          {
+            "$ref": "#/components/parameters/Search"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "$ref": "#/components/schemas/ItemsEnterprises"
+                      }
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/x-metadata"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update Multiple Items",
+        "description": "Update multiple enterprises items at the same time.",
+        "tags": [
+          "Items",
+          "ItemsEnterprises"
+        ],
+        "operationId": "updateItemsEnterprises",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Fields"
+          },
+          {
+            "$ref": "#/components/parameters/Limit"
+          },
+          {
+            "$ref": "#/components/parameters/Meta"
+          },
+          {
+            "$ref": "#/components/parameters/Offset"
+          },
+          {
+            "$ref": "#/components/parameters/Sort"
+          },
+          {
+            "$ref": "#/components/parameters/Filter"
+          },
+          {
+            "$ref": "#/components/parameters/Search"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/ItemsEnterprises"
+                    }
+                  },
+                  {
+                    "$ref": "#/components/schemas/ItemsEnterprises"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ItemsEnterprises"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Multiple Items",
+        "description": "Delete multiple existing enterprises items.",
+        "tags": [
+          "Items",
+          "ItemsEnterprises"
+        ],
+        "operationId": "deleteItemsEnterprises",
+        "responses": {
+          "200": {
+            "description": "Successful request"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        },
+        "parameters": []
+      }
+    },
+    "/items/enterprises/{id}": {
+      "get": {
+        "summary": "Retrieve an Item",
+        "description": "Retrieve a single enterprises item by unique identifier.",
+        "tags": [
+          "Items",
+          "ItemsEnterprises"
+        ],
+        "operationId": "readSingleItemsEnterprises",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Fields"
+          },
+          {
+            "$ref": "#/components/parameters/Meta"
+          },
+          {
+            "$ref": "#/components/parameters/Version"
+          },
+          {
+            "name": "id",
+            "description": "Index of the item.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer",
+                  "description": "Incremental index of the item.",
+                  "example": 1
+                },
+                {
+                  "type": "string",
+                  "description": "Unique identifier of the item.",
+                  "example": "8cbb43fe-4cdf-4991-8352-c461779cec02"
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/ItemsEnterprises"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update an Item",
+        "description": "Update an existing enterprises item.",
+        "tags": [
+          "Items",
+          "ItemsEnterprises"
+        ],
+        "operationId": "updateSingleItemsEnterprises",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Fields"
+          },
+          {
+            "$ref": "#/components/parameters/Meta"
+          },
+          {
+            "name": "id",
+            "description": "Index of the item.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer",
+                  "description": "Incremental index of the item.",
+                  "example": 1
+                },
+                {
+                  "type": "string",
+                  "description": "Unique identifier of the item.",
+                  "example": "8cbb43fe-4cdf-4991-8352-c461779cec02"
+                }
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "$ref": "#/components/schemas/ItemsEnterprises"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/ItemsEnterprises"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete an Item",
+        "description": "Delete an existing enterprises item.",
+        "tags": [
+          "Items",
+          "ItemsEnterprises"
+        ],
+        "operationId": "deleteSingleItemsEnterprises",
+        "responses": {
+          "200": {
+            "description": "Successful request"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Index of the item.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer",
+                  "description": "Incremental index of the item.",
+                  "example": 1
+                },
+                {
+                  "type": "string",
+                  "description": "Unique identifier of the item.",
+                  "example": "8cbb43fe-4cdf-4991-8352-c461779cec02"
+                }
+              ]
+            }
+          }
+        ]
+      }
     }
   },
   "tags": [
@@ -13924,13 +14702,22 @@
       "description": "Colección para gestionar segmentos del CRM"
     },
     {
-      "name": "ItemsEnterprises",
-      "x-collection": "enterprises",
-      "description": "Colección para gestionar empresas del CRM"
+      "name": "ItemsEnterprisesTags",
+      "x-collection": "enterprises_tags"
+    },
+    {
+      "name": "ItemsEnterpriseTags",
+      "x-collection": "enterprise_tags",
+      "description": "Etiquetas para empresas"
     },
     {
       "name": "ItemsEnterprisesIndustries",
       "x-collection": "enterprises_industries"
+    },
+    {
+      "name": "ItemsEnterprises",
+      "x-collection": "enterprises",
+      "description": "Colección para gestionar empresas del CRM"
     }
   ],
   "components": {
@@ -16420,144 +17207,67 @@
         },
         "x-collection": "segments"
       },
-      "ItemsEnterprises": {
+      "ItemsEnterprisesTags": {
         "type": "object",
         "properties": {
           "id": {
             "nullable": false,
             "type": "integer"
           },
-          "about": {
+          "enterprise_id": {
             "nullable": true,
-            "description": "Descripción de la empresa",
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "$ref": "#/components/schemas/ItemsEnterprises"
+              }
+            ]
+          },
+          "tag_id": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "$ref": "#/components/schemas/ItemsEnterpriseTags"
+              }
+            ]
+          },
+          "created_at": {
+            "nullable": true,
+            "type": "string",
+            "format": "timestamp"
+          }
+        },
+        "x-collection": "enterprises_tags"
+      },
+      "ItemsEnterpriseTags": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "nullable": false,
+            "description": "ID autogenerado",
+            "type": "integer"
+          },
+          "name": {
+            "nullable": false,
+            "description": "Nombre de la etiqueta",
             "type": "string"
           },
-          "annual_revenue": {
+          "color": {
             "nullable": true,
-            "description": "Ingresos anuales",
             "type": "string"
           },
           "created_at": {
             "nullable": true,
-            "description": "Fecha de creación",
             "type": "string",
             "format": "timestamp"
-          },
-          "email": {
-            "nullable": true,
-            "description": "Email de la empresa",
-            "type": "string"
-          },
-          "employs": {
-            "nullable": true,
-            "description": "Número de empleados",
-            "type": "string"
-          },
-          "facebook": {
-            "nullable": true,
-            "description": "URL de Facebook",
-            "type": "string"
-          },
-          "founded_year": {
-            "nullable": true,
-            "description": "Año de fundación",
-            "type": "string"
-          },
-          "image": {
-            "nullable": true,
-            "description": "Logo de la empresa",
-            "type": "string",
-            "format": "uuid"
-          },
-          "linkedin": {
-            "nullable": true,
-            "description": "URL de LinkedIn",
-            "type": "string"
-          },
-          "name": {
-            "nullable": false,
-            "description": "Nombre de la empresa",
-            "type": "string"
-          },
-          "nit": {
-            "nullable": true,
-            "description": "NIT de la empresa",
-            "type": "string"
-          },
-          "phone": {
-            "nullable": true,
-            "description": "Teléfono de la empresa",
-            "type": "string"
-          },
-          "twitter": {
-            "nullable": true,
-            "description": "URL de Twitter",
-            "type": "string"
-          },
-          "updated_at": {
-            "nullable": true,
-            "description": "Fecha de última actualización",
-            "type": "string",
-            "format": "timestamp"
-          },
-          "keywords": {
-            "nullable": true,
-            "type": "array",
-            "items": {
-              "oneOf": [
-                {
-                  "type": "integer"
-                },
-                {
-                  "$ref": "#/components/schemas/ItemsEnterprisesKeywords"
-                }
-              ]
-            }
-          },
-          "locations": {
-            "nullable": true,
-            "type": "array",
-            "items": {
-              "oneOf": [
-                {
-                  "type": "integer"
-                },
-                {
-                  "$ref": "#/components/schemas/ItemsEnterprisesLocations"
-                }
-              ]
-            }
-          },
-          "technologies": {
-            "nullable": true,
-            "type": "array",
-            "items": {
-              "oneOf": [
-                {
-                  "type": "integer"
-                },
-                {
-                  "$ref": "#/components/schemas/ItemsEnterprisesTechnologies"
-                }
-              ]
-            }
-          },
-          "industries": {
-            "nullable": true,
-            "type": "array",
-            "items": {
-              "oneOf": [
-                {
-                  "type": "integer"
-                },
-                {
-                  "$ref": "#/components/schemas/ItemsEnterprisesIndustries"
-                }
-              ]
-            }
           }
         },
-        "x-collection": "enterprises",
+        "x-collection": "enterprise_tags",
         "required": [
           "name"
         ]
@@ -16593,6 +17303,117 @@
           }
         },
         "x-collection": "enterprises_industries"
+      },
+      "ItemsEnterprises": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "nullable": false,
+            "description": "ID autogenerado",
+            "type": "integer"
+          },
+          "notes": {
+            "nullable": true,
+            "description": "Notas adicionales",
+            "type": "string"
+          },
+          "created_at": {
+            "nullable": true,
+            "description": "Fecha de creación automática",
+            "type": "string",
+            "format": "timestamp"
+          },
+          "company_size": {
+            "nullable": true,
+            "description": "Rango de empleados",
+            "type": "string"
+          },
+          "linkedin": {
+            "nullable": true,
+            "description": "URL del perfil de LinkedIn",
+            "type": "string"
+          },
+          "organization_name": {
+            "nullable": false,
+            "description": "Nombre oficial de la empresa (obligatorio)",
+            "type": "string"
+          },
+          "fiscal_identification": {
+            "nullable": true,
+            "description": "Número de identificación fiscal",
+            "type": "string"
+          },
+          "updated_at": {
+            "nullable": true,
+            "description": "Fecha de última modificación",
+            "type": "string",
+            "format": "timestamp"
+          },
+          "commercial_name": {
+            "nullable": true,
+            "description": "Nombre comercial o marca",
+            "type": "string"
+          },
+          "fiscal_identification_type": {
+            "nullable": true,
+            "description": "Tipo de documento fiscal",
+            "type": "string"
+          },
+          "country": {
+            "nullable": true,
+            "description": "País de la empresa (ISO-3166)",
+            "type": "string"
+          },
+          "normalized_address": {
+            "nullable": true,
+            "description": "Dirección con autocompletado Mapbox",
+            "type": "string"
+          },
+          "website": {
+            "nullable": true,
+            "description": "URL del sitio web",
+            "type": "string"
+          },
+          "phone_prefix": {
+            "nullable": true,
+            "description": "Prefijo telefónico (+E.164)",
+            "type": "string"
+          },
+          "phone_number": {
+            "nullable": true,
+            "description": "Número telefónico",
+            "type": "string"
+          },
+          "acquisition_source": {
+            "nullable": true,
+            "description": "Cómo se adquirió el lead",
+            "type": "string"
+          },
+          "internal_owner": {
+            "nullable": true,
+            "description": "Responsable interno",
+            "type": "string"
+          },
+          "industries": {
+            "nullable": true,
+            "description": "Sectores o industrias (selección múltiple)",
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "$ref": "#/components/schemas/ItemsEnterprisesIndustries"
+                }
+              ]
+            }
+          }
+        },
+        "x-collection": "enterprises",
+        "required": [
+          "organization_name"
+        ]
       }
     },
     "parameters": {

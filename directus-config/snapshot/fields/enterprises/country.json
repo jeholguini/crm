@@ -1,0 +1,83 @@
+{
+  "collection": "enterprises",
+  "field": "country",
+  "type": "string",
+  "meta": {
+    "collection": "enterprises",
+    "conditions": null,
+    "display": null,
+    "display_options": null,
+    "field": "country",
+    "group": null,
+    "hidden": false,
+    "interface": "select-dropdown",
+    "note": "País de la empresa (ISO-3166)",
+    "options": {
+      "choices": [
+        {
+          "text": "Colombia",
+          "value": "COL"
+        },
+        {
+          "text": "Argentina",
+          "value": "ARG"
+        },
+        {
+          "text": "Brasil",
+          "value": "BRA"
+        },
+        {
+          "text": "Chile",
+          "value": "CHL"
+        },
+        {
+          "text": "México",
+          "value": "MEX"
+        },
+        {
+          "text": "Perú",
+          "value": "PER"
+        },
+        {
+          "text": "Estados Unidos",
+          "value": "USA"
+        },
+        {
+          "text": "España",
+          "value": "ESP"
+        }
+      ]
+    },
+    "readonly": false,
+    "required": false,
+    "sort": 8,
+    "special": null,
+    "translations": [
+      {
+        "language": "es-ES",
+        "translation": "País"
+      }
+    ],
+    "validation": null,
+    "validation_message": null,
+    "width": "half"
+  },
+  "schema": {
+    "name": "country",
+    "table": "enterprises",
+    "data_type": "character varying",
+    "default_value": null,
+    "max_length": 3,
+    "numeric_precision": null,
+    "numeric_scale": null,
+    "is_nullable": true,
+    "is_unique": false,
+    "is_indexed": true,
+    "is_primary_key": false,
+    "is_generated": false,
+    "generation_expression": null,
+    "has_auto_increment": false,
+    "foreign_key_table": null,
+    "foreign_key_column": null
+  }
+}

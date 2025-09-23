@@ -1,29 +1,34 @@
 {
   "collection": "enterprises",
-  "field": "founded_year",
+  "field": "internal_owner",
   "type": "string",
   "meta": {
     "collection": "enterprises",
     "conditions": null,
-    "display": "raw",
+    "display": null,
     "display_options": null,
-    "field": "founded_year",
+    "field": "internal_owner",
     "group": null,
     "hidden": false,
     "interface": "input",
-    "note": "Año de fundación",
+    "note": "Responsable interno",
     "options": null,
     "readonly": false,
     "required": false,
     "sort": 14,
     "special": null,
-    "translations": null,
+    "translations": [
+      {
+        "language": "es-ES",
+        "translation": "Propietario interno"
+      }
+    ],
     "validation": null,
     "validation_message": null,
     "width": "half"
   },
   "schema": {
-    "name": "founded_year",
+    "name": "internal_owner",
     "table": "enterprises",
     "data_type": "character varying",
     "default_value": null,

@@ -1,0 +1,83 @@
+{
+  "collection": "enterprises",
+  "field": "phone_prefix",
+  "type": "string",
+  "meta": {
+    "collection": "enterprises",
+    "conditions": null,
+    "display": null,
+    "display_options": null,
+    "field": "phone_prefix",
+    "group": null,
+    "hidden": false,
+    "interface": "select-dropdown",
+    "note": "Prefijo telefónico (+E.164)",
+    "options": {
+      "choices": [
+        {
+          "text": "+57 (Colombia)",
+          "value": "+57"
+        },
+        {
+          "text": "+54 (Argentina)",
+          "value": "+54"
+        },
+        {
+          "text": "+55 (Brasil)",
+          "value": "+55"
+        },
+        {
+          "text": "+56 (Chile)",
+          "value": "+56"
+        },
+        {
+          "text": "+52 (México)",
+          "value": "+52"
+        },
+        {
+          "text": "+51 (Perú)",
+          "value": "+51"
+        },
+        {
+          "text": "+1 (Estados Unidos)",
+          "value": "+1"
+        },
+        {
+          "text": "+34 (España)",
+          "value": "+34"
+        }
+      ]
+    },
+    "readonly": false,
+    "required": false,
+    "sort": 11,
+    "special": null,
+    "translations": [
+      {
+        "language": "es-ES",
+        "translation": "Teléfono – prefijo"
+      }
+    ],
+    "validation": null,
+    "validation_message": null,
+    "width": "quarter"
+  },
+  "schema": {
+    "name": "phone_prefix",
+    "table": "enterprises",
+    "data_type": "character varying",
+    "default_value": null,
+    "max_length": 10,
+    "numeric_precision": null,
+    "numeric_scale": null,
+    "is_nullable": true,
+    "is_unique": false,
+    "is_indexed": false,
+    "is_primary_key": false,
+    "is_generated": false,
+    "generation_expression": null,
+    "has_auto_increment": false,
+    "foreign_key_table": null,
+    "foreign_key_column": null
+  }
+}

@@ -5,24 +5,24 @@
   "meta": {
     "collection": "enterprises",
     "conditions": null,
-    "display": "datetime",
-    "display_options": {
-      "relative": true
-    },
+    "display": null,
+    "display_options": null,
     "field": "created_at",
     "group": null,
-    "hidden": true,
+    "hidden": false,
     "interface": "datetime",
-    "note": "Fecha de creación",
+    "note": "Fecha de creación automática",
     "options": null,
     "readonly": true,
     "required": false,
-    "sort": 15,
-    "special": [
-      "date-created",
-      "cast-timestamp"
+    "sort": 16,
+    "special": null,
+    "translations": [
+      {
+        "language": "es-ES",
+        "translation": "Fecha de creación"
+      }
     ],
-    "translations": null,
     "validation": null,
     "validation_message": null,
     "width": "half"

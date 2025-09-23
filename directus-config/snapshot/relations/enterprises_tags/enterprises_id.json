@@ -1,0 +1,16 @@
+{
+  "collection": "enterprises_tags",
+  "field": "enterprises_id",
+  "related_collection": "enterprises",
+  "meta": {
+    "junction_field": "tag_id",
+    "many_collection": "enterprises_tags",
+    "many_field": "enterprises_id",
+    "one_allowed_collections": null,
+    "one_collection": "enterprises",
+    "one_collection_field": null,
+    "one_deselect_action": "nullify",
+    "one_field": null,
+    "sort_field": null
+  }
+}

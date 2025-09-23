@@ -1,0 +1,25 @@
+{
+  "collection": "enterprises_tags",
+  "field": "tag_id",
+  "related_collection": "enterprise_tags",
+  "meta": {
+    "junction_field": "enterprises_id",
+    "many_collection": "enterprises_tags",
+    "many_field": "tag_id",
+    "one_allowed_collections": null,
+    "one_collection": "enterprise_tags",
+    "one_collection_field": null,
+    "one_deselect_action": "nullify",
+    "one_field": null,
+    "sort_field": null
+  },
+  "schema": {
+    "table": "enterprises_tags",
+    "column": "tag_id",
+    "foreign_key_table": "enterprise_tags",
+    "foreign_key_column": "id",
+    "constraint_name": "enterprises_tags_tag_id_fkey",
+    "on_update": "NO ACTION",
+    "on_delete": "CASCADE"
+  }
+}

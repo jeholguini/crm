@@ -1,29 +1,34 @@
 {
   "collection": "enterprises",
-  "field": "annual_revenue",
+  "field": "commercial_name",
   "type": "string",
   "meta": {
     "collection": "enterprises",
     "conditions": null,
-    "display": "raw",
+    "display": null,
     "display_options": null,
-    "field": "annual_revenue",
+    "field": "commercial_name",
     "group": null,
     "hidden": false,
     "interface": "input",
-    "note": "Ingresos anuales",
+    "note": "Nombre comercial o marca",
     "options": null,
     "readonly": false,
     "required": false,
-    "sort": 13,
+    "sort": 3,
     "special": null,
-    "translations": null,
+    "translations": [
+      {
+        "language": "es-ES",
+        "translation": "Nombre comercial / marca"
+      }
+    ],
     "validation": null,
     "validation_message": null,
     "width": "half"
   },
   "schema": {
-    "name": "annual_revenue",
+    "name": "commercial_name",
     "table": "enterprises",
     "data_type": "character varying",
     "default_value": null,
