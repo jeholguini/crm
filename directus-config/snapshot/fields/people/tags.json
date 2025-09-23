@@ -1,27 +1,32 @@
 {
   "collection": "people",
-  "field": "technologies",
+  "field": "tags",
   "type": "alias",
   "meta": {
     "collection": "people",
     "conditions": null,
     "display": null,
     "display_options": null,
-    "field": "technologies",
+    "field": "tags",
     "group": null,
     "hidden": false,
     "interface": "list-m2m",
-    "note": null,
+    "note": "Etiquetas dinámicas (chips)",
     "options": null,
     "readonly": false,
     "required": false,
-    "sort": 13,
+    "sort": 17,
     "special": [
       "m2m"
     ],
-    "translations": null,
+    "translations": [
+      {
+        "language": "es-ES",
+        "translation": "Etiquetas / tags"
+      }
+    ],
     "validation": null,
     "validation_message": null,
-    "width": "half"
+    "width": "full"
   }
 }

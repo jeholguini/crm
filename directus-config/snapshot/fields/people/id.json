@@ -10,14 +10,19 @@
     "field": "id",
     "group": null,
     "hidden": true,
-    "interface": "numeric",
-    "note": null,
+    "interface": "input",
+    "note": "ID autogenerado",
     "options": null,
     "readonly": true,
     "required": false,
     "sort": 1,
     "special": null,
-    "translations": null,
+    "translations": [
+      {
+        "language": "es-ES",
+        "translation": "ID interno"
+      }
+    ],
     "validation": null,
     "validation_message": null,
     "width": "full"

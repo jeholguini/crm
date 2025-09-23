@@ -1,33 +1,38 @@
 {
   "collection": "people",
-  "field": "name",
-  "type": "string",
+  "field": "communication_consent",
+  "type": "boolean",
   "meta": {
     "collection": "people",
     "conditions": null,
     "display": null,
     "display_options": null,
-    "field": "name",
+    "field": "communication_consent",
     "group": null,
     "hidden": false,
-    "interface": "input",
-    "note": null,
+    "interface": "boolean",
+    "note": "Consentimiento para comunicaciones",
     "options": null,
     "readonly": false,
-    "required": true,
-    "sort": 2,
+    "required": false,
+    "sort": 16,
     "special": null,
-    "translations": null,
+    "translations": [
+      {
+        "language": "es-ES",
+        "translation": "Consentimiento de comunicación (GDPR/LOPD)"
+      }
+    ],
     "validation": null,
     "validation_message": null,
-    "width": "full"
+    "width": "half"
   },
   "schema": {
-    "name": "name",
+    "name": "communication_consent",
     "table": "people",
-    "data_type": "character varying",
-    "default_value": null,
-    "max_length": 255,
+    "data_type": "boolean",
+    "default_value": false,
+    "max_length": null,
     "numeric_precision": null,
     "numeric_scale": null,
     "is_nullable": true,

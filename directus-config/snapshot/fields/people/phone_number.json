@@ -1,35 +1,38 @@
 {
   "collection": "people",
-  "field": "phone",
+  "field": "phone_number",
   "type": "string",
   "meta": {
     "collection": "people",
     "conditions": null,
     "display": null,
     "display_options": null,
-    "field": "phone",
+    "field": "phone_number",
     "group": null,
     "hidden": false,
     "interface": "input",
-    "note": null,
-    "options": {
-      "placeholder": "+1234567890"
-    },
+    "note": "Número telefónico sin prefijo",
+    "options": null,
     "readonly": false,
     "required": false,
-    "sort": 5,
+    "sort": 8,
     "special": null,
-    "translations": null,
+    "translations": [
+      {
+        "language": "es-ES",
+        "translation": "Teléfono – número"
+      }
+    ],
     "validation": null,
     "validation_message": null,
-    "width": "half"
+    "width": "quarter"
   },
   "schema": {
-    "name": "phone",
+    "name": "phone_number",
     "table": "people",
     "data_type": "character varying",
     "default_value": null,
-    "max_length": 255,
+    "max_length": 20,
     "numeric_precision": null,
     "numeric_scale": null,
     "is_nullable": true,

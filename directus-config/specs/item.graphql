@@ -27,6 +27,10 @@ type Query {
   enterprises_technologies_by_id(id: ID!, version: String): enterprises_technologies
   enterprises_technologies_aggregated(groupBy: [String], filter: enterprises_technologies_filter, limit: Int, offset: Int, page: Int, search: String, sort: [String]): [enterprises_technologies_aggregated!]!
   enterprises_technologies_by_version(version: String!, id: ID!): version_enterprises_technologies
+  people(filter: people_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [people!]!
+  people_by_id(id: ID!, version: String): people
+  people_aggregated(groupBy: [String], filter: people_filter, limit: Int, offset: Int, page: Int, search: String, sort: [String]): [people_aggregated!]!
+  people_by_version(version: String!, id: ID!): version_people
   people_technologies(filter: people_technologies_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [people_technologies!]!
   people_technologies_by_id(id: ID!, version: String): people_technologies
   people_technologies_aggregated(groupBy: [String], filter: people_technologies_filter, limit: Int, offset: Int, page: Int, search: String, sort: [String]): [people_technologies_aggregated!]!
@@ -35,10 +39,6 @@ type Query {
   person_employment_history_by_id(id: ID!, version: String): person_employment_history
   person_employment_history_aggregated(groupBy: [String], filter: person_employment_history_filter, limit: Int, offset: Int, page: Int, search: String, sort: [String]): [person_employment_history_aggregated!]!
   person_employment_history_by_version(version: String!, id: ID!): version_person_employment_history
-  people(filter: people_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [people!]!
-  people_by_id(id: ID!, version: String): people
-  people_aggregated(groupBy: [String], filter: people_filter, limit: Int, offset: Int, page: Int, search: String, sort: [String]): [people_aggregated!]!
-  people_by_version(version: String!, id: ID!): version_people
   industries(filter: industries_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [industries!]!
   industries_by_id(id: ID!, version: String): industries
   industries_aggregated(groupBy: [String], filter: industries_filter, limit: Int, offset: Int, page: Int, search: String, sort: [String]): [industries_aggregated!]!
@@ -63,6 +63,10 @@ type Query {
   enterprise_tags_by_id(id: ID!, version: String): enterprise_tags
   enterprise_tags_aggregated(groupBy: [String], filter: enterprise_tags_filter, limit: Int, offset: Int, page: Int, search: String, sort: [String]): [enterprise_tags_aggregated!]!
   enterprise_tags_by_version(version: String!, id: ID!): version_enterprise_tags
+  people_tags(filter: people_tags_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [people_tags!]!
+  people_tags_by_id(id: ID!, version: String): people_tags
+  people_tags_aggregated(groupBy: [String], filter: people_tags_filter, limit: Int, offset: Int, page: Int, search: String, sort: [String]): [people_tags_aggregated!]!
+  people_tags_by_version(version: String!, id: ID!): version_people_tags
   enterprises_industries(filter: enterprises_industries_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [enterprises_industries!]!
   enterprises_industries_by_id(id: ID!, version: String): enterprises_industries
   enterprises_industries_aggregated(groupBy: [String], filter: enterprises_industries_filter, limit: Int, offset: Int, page: Int, search: String, sort: [String]): [enterprises_industries_aggregated!]!
@@ -88,12 +92,12 @@ type Mutation {
   create_enterprises_locations_item(data: create_enterprises_locations_input!): enterprises_locations
   create_enterprises_technologies_items(filter: enterprises_technologies_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [create_enterprises_technologies_input!]): [enterprises_technologies!]!
   create_enterprises_technologies_item(data: create_enterprises_technologies_input!): enterprises_technologies
+  create_people_items(filter: people_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [create_people_input!]): [people!]!
+  create_people_item(data: create_people_input!): people
   create_people_technologies_items(filter: people_technologies_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [create_people_technologies_input!]): [people_technologies!]!
   create_people_technologies_item(data: create_people_technologies_input!): people_technologies
   create_person_employment_history_items(filter: person_employment_history_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [create_person_employment_history_input!]): [person_employment_history!]!
   create_person_employment_history_item(data: create_person_employment_history_input!): person_employment_history
-  create_people_items(filter: people_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [create_people_input!]): [people!]!
-  create_people_item(data: create_people_input!): people
   create_industries_items(filter: industries_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [create_industries_input!]): [industries!]!
   create_industries_item(data: create_industries_input!): industries
   create_people_keywords_items(filter: people_keywords_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [create_people_keywords_input!]): [people_keywords!]!
@@ -106,6 +110,8 @@ type Mutation {
   create_enterprises_tags_item(data: create_enterprises_tags_input!): enterprises_tags
   create_enterprise_tags_items(filter: enterprise_tags_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [create_enterprise_tags_input!]): [enterprise_tags!]!
   create_enterprise_tags_item(data: create_enterprise_tags_input!): enterprise_tags
+  create_people_tags_items(filter: people_tags_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [create_people_tags_input!]): [people_tags!]!
+  create_people_tags_item(data: create_people_tags_input!): people_tags
   create_enterprises_industries_items(filter: enterprises_industries_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [create_enterprises_industries_input!]): [enterprises_industries!]!
   create_enterprises_industries_item(data: create_enterprises_industries_input!): enterprises_industries
   create_enterprises_items(filter: enterprises_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [create_enterprises_input!]): [enterprises!]!
@@ -131,15 +137,15 @@ type Mutation {
   update_enterprises_technologies_items(filter: enterprises_technologies_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, ids: [ID]!, data: update_enterprises_technologies_input!): [enterprises_technologies!]!
   update_enterprises_technologies_batch(filter: enterprises_technologies_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [update_enterprises_technologies_input!]): [enterprises_technologies!]!
   update_enterprises_technologies_item(id: ID!, data: update_enterprises_technologies_input!): enterprises_technologies
+  update_people_items(filter: people_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, ids: [ID]!, data: update_people_input!): [people!]!
+  update_people_batch(filter: people_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [update_people_input!]): [people!]!
+  update_people_item(id: ID!, data: update_people_input!): people
   update_people_technologies_items(filter: people_technologies_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, ids: [ID]!, data: update_people_technologies_input!): [people_technologies!]!
   update_people_technologies_batch(filter: people_technologies_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [update_people_technologies_input!]): [people_technologies!]!
   update_people_technologies_item(id: ID!, data: update_people_technologies_input!): people_technologies
   update_person_employment_history_items(filter: person_employment_history_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, ids: [ID]!, data: update_person_employment_history_input!): [person_employment_history!]!
   update_person_employment_history_batch(filter: person_employment_history_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [update_person_employment_history_input!]): [person_employment_history!]!
   update_person_employment_history_item(id: ID!, data: update_person_employment_history_input!): person_employment_history
-  update_people_items(filter: people_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, ids: [ID]!, data: update_people_input!): [people!]!
-  update_people_batch(filter: people_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [update_people_input!]): [people!]!
-  update_people_item(id: ID!, data: update_people_input!): people
   update_industries_items(filter: industries_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, ids: [ID]!, data: update_industries_input!): [industries!]!
   update_industries_batch(filter: industries_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [update_industries_input!]): [industries!]!
   update_industries_item(id: ID!, data: update_industries_input!): industries
@@ -158,6 +164,9 @@ type Mutation {
   update_enterprise_tags_items(filter: enterprise_tags_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, ids: [ID]!, data: update_enterprise_tags_input!): [enterprise_tags!]!
   update_enterprise_tags_batch(filter: enterprise_tags_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [update_enterprise_tags_input!]): [enterprise_tags!]!
   update_enterprise_tags_item(id: ID!, data: update_enterprise_tags_input!): enterprise_tags
+  update_people_tags_items(filter: people_tags_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, ids: [ID]!, data: update_people_tags_input!): [people_tags!]!
+  update_people_tags_batch(filter: people_tags_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [update_people_tags_input!]): [people_tags!]!
+  update_people_tags_item(id: ID!, data: update_people_tags_input!): people_tags
   update_enterprises_industries_items(filter: enterprises_industries_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, ids: [ID]!, data: update_enterprises_industries_input!): [enterprises_industries!]!
   update_enterprises_industries_batch(filter: enterprises_industries_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [update_enterprises_industries_input!]): [enterprises_industries!]!
   update_enterprises_industries_item(id: ID!, data: update_enterprises_industries_input!): enterprises_industries
@@ -178,12 +187,12 @@ type Mutation {
   delete_enterprises_locations_item(id: ID!): delete_one
   delete_enterprises_technologies_items(ids: [ID]!): delete_many
   delete_enterprises_technologies_item(id: ID!): delete_one
+  delete_people_items(ids: [ID]!): delete_many
+  delete_people_item(id: ID!): delete_one
   delete_people_technologies_items(ids: [ID]!): delete_many
   delete_people_technologies_item(id: ID!): delete_one
   delete_person_employment_history_items(ids: [ID]!): delete_many
   delete_person_employment_history_item(id: ID!): delete_one
-  delete_people_items(ids: [ID]!): delete_many
-  delete_people_item(id: ID!): delete_one
   delete_industries_items(ids: [ID]!): delete_many
   delete_industries_item(id: ID!): delete_one
   delete_people_keywords_items(ids: [ID]!): delete_many
@@ -196,6 +205,8 @@ type Mutation {
   delete_enterprises_tags_item(id: ID!): delete_one
   delete_enterprise_tags_items(ids: [ID]!): delete_many
   delete_enterprise_tags_item(id: ID!): delete_one
+  delete_people_tags_items(ids: [ID]!): delete_many
+  delete_people_tags_item(id: ID!): delete_one
   delete_enterprises_industries_items(ids: [ID]!): delete_many
   delete_enterprises_industries_item(id: ID!): delete_one
   delete_enterprises_items(ids: [ID]!): delete_many
@@ -231,15 +242,16 @@ type Subscription {
   technologies_mutated(event: EventEnum): technologies_mutated
   enterprises_locations_mutated(event: EventEnum): enterprises_locations_mutated
   enterprises_technologies_mutated(event: EventEnum): enterprises_technologies_mutated
+  people_mutated(event: EventEnum): people_mutated
   people_technologies_mutated(event: EventEnum): people_technologies_mutated
   person_employment_history_mutated(event: EventEnum): person_employment_history_mutated
-  people_mutated(event: EventEnum): people_mutated
   industries_mutated(event: EventEnum): industries_mutated
   people_keywords_mutated(event: EventEnum): people_keywords_mutated
   enterprises_keywords_mutated(event: EventEnum): enterprises_keywords_mutated
   segments_mutated(event: EventEnum): segments_mutated
   enterprises_tags_mutated(event: EventEnum): enterprises_tags_mutated
   enterprise_tags_mutated(event: EventEnum): enterprise_tags_mutated
+  people_tags_mutated(event: EventEnum): people_tags_mutated
   enterprises_industries_mutated(event: EventEnum): enterprises_industries_mutated
   enterprises_mutated(event: EventEnum): enterprises_mutated
 }
@@ -1437,26 +1449,58 @@ type locations_mutated {
 }
 
 type people {
+  """ID autogenerado"""
   id: ID!
-  about: String
-  age: Int
+
+  """Notas y comentarios adicionales"""
+  notes: String
+
+  """Fecha de creación automática"""
   created_at: Date
   created_at_func: datetime_functions
-  email: String
-  image: ID
+
+  """Email principal de contacto"""
+  primary_email: String
+
+  """URL del perfil de LinkedIn"""
   linkedin: String
-  name: String
-  office_number: String
-  personal_phone: String
-  phone: String
-  sex: String
+
+  """Nombre completo de la persona (obligatorio)"""
+  full_name: String!
+
+  """Fecha de última actualización"""
   updated_at: Date
   updated_at_func: datetime_functions
-  location_id(filter: locations_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): locations
+
+  """Cargo o puesto de trabajo"""
+  position_title: String
+
+  """Área o departamento"""
+  department: String
+
+  """Prefijo telefónico (+E.164)"""
+  phone_prefix: String
+
+  """Número telefónico sin prefijo"""
+  phone_number: String
+  enterprise_relation_id(filter: enterprises_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): enterprises
+
+  """Nivel de decisión en la organización"""
+  decision_level: String
+
+  """Cómo se adquirió el contacto"""
+  acquisition_source: String
+
+  """Responsable interno del contacto"""
+  internal_owner: String
+
+  """Consentimiento para comunicaciones"""
+  communication_consent: Boolean
+  tags(filter: people_tags_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [people_tags]
+  tags_func: count_functions
   keywords(filter: people_keywords_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [people_keywords]
-  keywords_func: count_functions
   technologies(filter: people_technologies_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [people_technologies]
-  technologies_func: count_functions
+  location_id(filter: locations_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): locations
 }
 
 type people_aggregated {
@@ -1473,28 +1517,64 @@ type people_aggregated {
 }
 
 type people_aggregated_count {
+  """ID autogenerado"""
   id: Int
-  about: Int
-  age: Int
+
+  """Notas y comentarios adicionales"""
+  notes: Int
+
+  """Fecha de creación automática"""
   created_at: Int
-  email: Int
-  image: Int
+
+  """Email principal de contacto"""
+  primary_email: Int
+
+  """URL del perfil de LinkedIn"""
   linkedin: Int
-  name: Int
-  office_number: Int
-  personal_phone: Int
-  phone: Int
-  sex: Int
+
+  """Nombre completo de la persona (obligatorio)"""
+  full_name: Int
+
+  """Fecha de última actualización"""
   updated_at: Int
-  location_id: Int
-  keywords: Int
-  technologies: Int
+
+  """Cargo o puesto de trabajo"""
+  position_title: Int
+
+  """Área o departamento"""
+  department: Int
+
+  """Prefijo telefónico (+E.164)"""
+  phone_prefix: Int
+
+  """Número telefónico sin prefijo"""
+  phone_number: Int
+
+  """Empresa u organización relacionada"""
+  enterprise_relation_id: Int
+
+  """Nivel de decisión en la organización"""
+  decision_level: Int
+
+  """Cómo se adquirió el contacto"""
+  acquisition_source: Int
+
+  """Responsable interno del contacto"""
+  internal_owner: Int
+
+  """Consentimiento para comunicaciones"""
+  communication_consent: Int
+
+  """Etiquetas dinámicas (chips)"""
+  tags: Int
 }
 
 type people_aggregated_fields {
+  """ID autogenerado"""
   id: Float
-  age: Float
-  location_id: Float
+
+  """Empresa u organización relacionada"""
+  enterprise_relation_id: Float
 }
 
 type people_keywords {
@@ -1538,6 +1618,46 @@ type people_mutated {
   key: ID!
   event: EventEnum
   data: people
+}
+
+type people_tags {
+  id: ID!
+  person_id(filter: people_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): people
+  tag_id(filter: enterprise_tags_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): enterprise_tags
+  created_at: Date
+  created_at_func: datetime_functions
+}
+
+type people_tags_aggregated {
+  group: JSON
+  countAll: Int
+  count: people_tags_aggregated_count
+  countDistinct: people_tags_aggregated_count
+  avg: people_tags_aggregated_fields
+  sum: people_tags_aggregated_fields
+  avgDistinct: people_tags_aggregated_fields
+  sumDistinct: people_tags_aggregated_fields
+  min: people_tags_aggregated_fields
+  max: people_tags_aggregated_fields
+}
+
+type people_tags_aggregated_count {
+  id: Int
+  person_id: Int
+  tag_id: Int
+  created_at: Int
+}
+
+type people_tags_aggregated_fields {
+  id: Float
+  person_id: Float
+  tag_id: Float
+}
+
+type people_tags_mutated {
+  key: ID!
+  event: EventEnum
+  data: people_tags
 }
 
 type people_technologies {
@@ -1947,22 +2067,55 @@ type version_locations {
 
 """"""
 type version_people {
+  """ID autogenerado"""
   id: ID
-  about: String
-  age: Int
+
+  """Notas y comentarios adicionales"""
+  notes: String
+
+  """Fecha de creación automática"""
   created_at: Date
-  email: String
-  image: ID
+
+  """Email principal de contacto"""
+  primary_email: String
+
+  """URL del perfil de LinkedIn"""
   linkedin: String
-  name: String
-  office_number: String
-  personal_phone: String
-  phone: String
-  sex: String
+
+  """Nombre completo de la persona (obligatorio)"""
+  full_name: String
+
+  """Fecha de última actualización"""
   updated_at: Date
-  location_id: JSON
+
+  """Cargo o puesto de trabajo"""
+  position_title: String
+
+  """Área o departamento"""
+  department: String
+
+  """Prefijo telefónico (+E.164)"""
+  phone_prefix: String
+
+  """Número telefónico sin prefijo"""
+  phone_number: String
+  enterprise_relation_id: JSON
+
+  """Nivel de decisión en la organización"""
+  decision_level: String
+
+  """Cómo se adquirió el contacto"""
+  acquisition_source: String
+
+  """Responsable interno del contacto"""
+  internal_owner: String
+
+  """Consentimiento para comunicaciones"""
+  communication_consent: Boolean
+  tags: JSON
   keywords: JSON
   technologies: JSON
+  location_id: JSON
 }
 
 """"""
@@ -1970,6 +2123,14 @@ type version_people_keywords {
   id: ID
   keywords_id: JSON
   people_id: JSON
+}
+
+""""""
+type version_people_tags {
+  id: ID
+  person_id: JSON
+  tag_id: JSON
+  created_at: Date
 }
 
 """"""
@@ -2211,28 +2372,68 @@ input create_locations_input {
 }
 
 input create_people_input {
+  """ID autogenerado"""
   id: ID
-  about: String
-  age: Int
+
+  """Notas y comentarios adicionales"""
+  notes: String
+
+  """Fecha de creación automática"""
   created_at: Date
-  email: String
-  image: ID
+
+  """Email principal de contacto"""
+  primary_email: String
+
+  """URL del perfil de LinkedIn"""
   linkedin: String
-  name: String
-  office_number: String
-  personal_phone: String
-  phone: String
-  sex: String
+
+  """Nombre completo de la persona (obligatorio)"""
+  full_name: String!
+
+  """Fecha de última actualización"""
   updated_at: Date
-  location_id: create_locations_input
+
+  """Cargo o puesto de trabajo"""
+  position_title: String
+
+  """Área o departamento"""
+  department: String
+
+  """Prefijo telefónico (+E.164)"""
+  phone_prefix: String
+
+  """Número telefónico sin prefijo"""
+  phone_number: String
+  enterprise_relation_id: create_enterprises_input
+
+  """Nivel de decisión en la organización"""
+  decision_level: String
+
+  """Cómo se adquirió el contacto"""
+  acquisition_source: String
+
+  """Responsable interno del contacto"""
+  internal_owner: String
+
+  """Consentimiento para comunicaciones"""
+  communication_consent: Boolean
+  tags: [create_people_tags_input]
   keywords: [create_people_keywords_input]
   technologies: [create_people_technologies_input]
+  location_id: create_locations_input
 }
 
 input create_people_keywords_input {
   id: ID
   keywords_id: create_keywords_input
   people_id: create_people_input
+}
+
+input create_people_tags_input {
+  id: ID
+  person_id: create_people_input
+  tag_id: create_enterprise_tags_input
+  created_at: Date
 }
 
 input create_people_technologies_input {
@@ -2973,27 +3174,30 @@ input number_filter_operators {
 
 input people_filter {
   id: number_filter_operators
-  about: string_filter_operators
-  age: number_filter_operators
+  notes: string_filter_operators
   created_at: date_filter_operators
   created_at_func: datetime_function_filter_operators
-  email: string_filter_operators
-  image: id_filter_operators
+  primary_email: string_filter_operators
   linkedin: string_filter_operators
-  name: string_filter_operators
-  office_number: string_filter_operators
-  personal_phone: string_filter_operators
-  phone: string_filter_operators
-  sex: string_filter_operators
+  full_name: string_filter_operators
   updated_at: date_filter_operators
   updated_at_func: datetime_function_filter_operators
-  location_id: locations_filter
-  keywords: people_keywords_quantifier_filter
-  keywords_func: count_function_filter_operators
-  technologies: people_technologies_quantifier_filter
-  technologies_func: count_function_filter_operators
+  position_title: string_filter_operators
+  department: string_filter_operators
+  phone_prefix: string_filter_operators
+  phone_number: string_filter_operators
+  enterprise_relation_id: enterprises_filter
+  decision_level: string_filter_operators
+  acquisition_source: string_filter_operators
+  internal_owner: string_filter_operators
+  communication_consent: boolean_filter_operators
+  tags: people_tags_quantifier_filter
+  tags_func: count_function_filter_operators
   _and: [people_filter]
   _or: [people_filter]
+  keywords: people_keywords_quantifier_filter
+  technologies: people_technologies_quantifier_filter
+  location_id: locations_filter
 }
 
 input people_keywords_filter {
@@ -3013,6 +3217,29 @@ input people_keywords_quantifier_filter {
   _or: [people_keywords_filter]
   _some: people_keywords_filter
   _none: people_keywords_filter
+}
+
+input people_tags_filter {
+  id: number_filter_operators
+  person_id: people_filter
+  tag_id: enterprise_tags_filter
+  created_at: date_filter_operators
+  created_at_func: datetime_function_filter_operators
+  _and: [people_tags_filter]
+  _or: [people_tags_filter]
+}
+
+""""""
+input people_tags_quantifier_filter {
+  id: number_filter_operators
+  person_id: people_filter
+  tag_id: enterprise_tags_filter
+  created_at: date_filter_operators
+  created_at_func: datetime_function_filter_operators
+  _and: [people_tags_filter]
+  _or: [people_tags_filter]
+  _some: people_tags_filter
+  _none: people_tags_filter
 }
 
 input people_technologies_filter {
@@ -3262,28 +3489,68 @@ input update_locations_input {
 }
 
 input update_people_input {
+  """ID autogenerado"""
   id: ID
-  about: String
-  age: Int
+
+  """Notas y comentarios adicionales"""
+  notes: String
+
+  """Fecha de creación automática"""
   created_at: Date
-  email: String
-  image: ID
+
+  """Email principal de contacto"""
+  primary_email: String
+
+  """URL del perfil de LinkedIn"""
   linkedin: String
-  name: String
-  office_number: String
-  personal_phone: String
-  phone: String
-  sex: String
+
+  """Nombre completo de la persona (obligatorio)"""
+  full_name: String
+
+  """Fecha de última actualización"""
   updated_at: Date
-  location_id: update_locations_input
+
+  """Cargo o puesto de trabajo"""
+  position_title: String
+
+  """Área o departamento"""
+  department: String
+
+  """Prefijo telefónico (+E.164)"""
+  phone_prefix: String
+
+  """Número telefónico sin prefijo"""
+  phone_number: String
+  enterprise_relation_id: update_enterprises_input
+
+  """Nivel de decisión en la organización"""
+  decision_level: String
+
+  """Cómo se adquirió el contacto"""
+  acquisition_source: String
+
+  """Responsable interno del contacto"""
+  internal_owner: String
+
+  """Consentimiento para comunicaciones"""
+  communication_consent: Boolean
+  tags: [update_people_tags_input]
   keywords: [update_people_keywords_input]
   technologies: [update_people_technologies_input]
+  location_id: update_locations_input
 }
 
 input update_people_keywords_input {
   id: ID
   keywords_id: update_keywords_input
   people_id: update_people_input
+}
+
+input update_people_tags_input {
+  id: ID
+  person_id: update_people_input
+  tag_id: update_enterprise_tags_input
+  created_at: Date
 }
 
 input update_people_technologies_input {

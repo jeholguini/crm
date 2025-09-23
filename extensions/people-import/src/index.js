@@ -42,7 +42,7 @@ module.exports = (router, { services, getSchema }) => {
       routes: [
         'GET /test - Prueba de conectividad',
         'POST /enterprises - Importar CSV de empresas (Pipedrive)',
-        'POST /people - Importar CSV de personas (formato personalizado)'
+        'POST /people - Importar CSV de personas (formato Pipedrive)'
       ]
     });
   });
@@ -198,7 +198,7 @@ module.exports = (router, { services, getSchema }) => {
     }
   });
 
-  // Endpoint para importar personas (formato personalizado)
+  // Endpoint para importar personas (formato Pipedrive)
   router.post('/people', upload.single('file'), async (req, res) => {
     try {
       // Verificar archivo
@@ -222,185 +222,177 @@ module.exports = (router, { services, getSchema }) => {
       // Obtener esquema
       const schema = await getSchema();
 
-      // Servicios para cada colección
+      // Servicios
       const peopleService = new ItemsService('people', { schema, accountability: req.accountability });
       const enterprisesService = new ItemsService('enterprises', { schema, accountability: req.accountability });
-      const industriesService = new ItemsService('industries', { schema, accountability: req.accountability });
-      const locationsService = new ItemsService('locations', { schema, accountability: req.accountability });
-      const keywordsService = new ItemsService('keywords', { schema, accountability: req.accountability });
-      const technologiesService = new ItemsService('technologies', { schema, accountability: req.accountability });
-      const enterprisesIndustriesService = new ItemsService('enterprises_industries', { schema, accountability: req.accountability });
-      const enterprisesLocationsService = new ItemsService('enterprises_locations', { schema, accountability: req.accountability });
-      const enterprisesKeywordsService = new ItemsService('enterprises_keywords', { schema, accountability: req.accountability });
-      const enterprisesTechnologiesService = new ItemsService('enterprises_technologies', { schema, accountability: req.accountability });
-      const employmentHistoryService = new ItemsService('person_employment_history', { schema, accountability: req.accountability });
 
       const results = [];
       const errors = [];
 
-      // Función para encontrar o crear elemento
-      async function findOrCreate(service, field, value, defaultData = {}) {
-        if (!value || value.trim() === '') return null;
+      // Procesar header
+      const headers = parseCSVLine(lines[0]);
 
-        try {
-          const existing = await service.readByQuery({
-            filter: { [field]: { _eq: value.trim() } },
-            limit: 1
-          });
-
-          if (existing && existing.length > 0) {
-            return existing[0].id;
-          }
-
-          const newItem = await service.createOne({
-            [field]: value.trim(),
-            ...defaultData
-          });
-
-          return newItem;
-        } catch (error) {
-          console.error(`Error en findOrCreate para ${value}:`, error);
-          return null;
+      // Mapeo de campos de Pipedrive a nuestra estructura
+      const fieldMapping = {};
+      headers.forEach((header, index) => {
+        switch (header.toLowerCase()) {
+          case 'name':
+            fieldMapping.full_name = index;
+            break;
+          case 'email_value':
+            fieldMapping.primary_email = index;
+            break;
+          case 'phone_value':
+            fieldMapping.phone_number = index;
+            break;
+          case 'job_title':
+            fieldMapping.position_title = index;
+            break;
+          case 'org_name':
+            fieldMapping.org_name = index;
+            break;
+          case 'notes':
+            fieldMapping.notes = index;
+            break;
+          case 'first_name':
+            fieldMapping.first_name = index;
+            break;
+          case 'last_name':
+            fieldMapping.last_name = index;
+            break;
+          case 'org_id_name':
+            fieldMapping.org_id_name = index;
+            break;
         }
-      }
+      });
 
-      // Procesar cada línea del CSV (saltando el header)
-      // Formato esperado: nit,nombre,telefono,email,industria,linkedin,fundacion,ubicaciones,keywords,tecnologias
+      // Procesar cada fila
       for (let i = 1; i < lines.length; i++) {
         try {
-          const line = lines[i];
-          if (!line.trim()) continue;
+          const values = parseCSVLine(lines[i]);
 
-          // Parsear CSV
-          const values = parseCSVLine(line);
+          // Construir nombre completo
+          let fullName = '';
+          if (fieldMapping.full_name !== undefined && values[fieldMapping.full_name]) {
+            fullName = values[fieldMapping.full_name].trim();
+          } else if (fieldMapping.first_name !== undefined && fieldMapping.last_name !== undefined) {
+            const firstName = values[fieldMapping.first_name] || '';
+            const lastName = values[fieldMapping.last_name] || '';
+            fullName = `${firstName} ${lastName}`.trim();
+          }
 
-          if (values.length < 10) {
+          if (!fullName) {
             errors.push({
               row: i + 1,
-              error: 'Fila incompleta, se esperan 10 columnas: nit,nombre,telefono,email,industria,linkedin,fundacion,ubicaciones,keywords,tecnologias'
+              error: 'Nombre completo requerido'
             });
             continue;
           }
 
-          const [nit, nombre, telefono, email, industria, linkedin, fundacion, ubicaciones, keywords, tecnologias] = values;
+          // Verificar si la persona ya existe por email o nombre
+          const email = fieldMapping.primary_email !== undefined ? values[fieldMapping.primary_email] : null;
+          let existingPerson = null;
 
-          // 1. Crear o encontrar empresa
+          if (email && email.trim()) {
+            existingPerson = await peopleService.readByQuery({
+              filter: { primary_email: { _eq: email.trim() } },
+              limit: 1,
+              fields: ['id', 'full_name', 'primary_email']
+            });
+          }
+
+          if (!existingPerson || existingPerson.length === 0) {
+            existingPerson = await peopleService.readByQuery({
+              filter: { full_name: { _eq: fullName } },
+              limit: 1,
+              fields: ['id', 'full_name', 'primary_email']
+            });
+          }
+
+          if (existingPerson && existingPerson.length > 0) {
+            results.push({
+              row: i + 1,
+              full_name: fullName,
+              primary_email: email,
+              status: 'exists',
+              id: existingPerson[0].id
+            });
+            continue;
+          }
+
+          // Buscar empresa si existe
           let enterpriseId = null;
-          if (nit && nombre) {
+          const orgName = fieldMapping.org_name !== undefined ? values[fieldMapping.org_name] :
+                         fieldMapping.org_id_name !== undefined ? values[fieldMapping.org_id_name] : null;
+
+          if (orgName && orgName.trim()) {
             const existingEnterprise = await enterprisesService.readByQuery({
-              filter: { fiscal_identification: { _eq: nit } },
+              filter: { organization_name: { _eq: orgName.trim() } },
               limit: 1,
               fields: ['id', 'organization_name']
             });
 
             if (existingEnterprise && existingEnterprise.length > 0) {
               enterpriseId = existingEnterprise[0].id;
-            } else {
-              // Crear nueva empresa
-              const enterpriseData = {
-                organization_name: nombre,
-                fiscal_identification: nit,
-                website: linkedin || null,
-                notes: `Año fundación: ${fundacion || 'N/A'}`
-              };
-
-              // Filtrar campos vacíos
-              Object.keys(enterpriseData).forEach(key => {
-                if (enterpriseData[key] === null || enterpriseData[key] === undefined || enterpriseData[key] === '') {
-                  delete enterpriseData[key];
-                }
-              });
-
-              enterpriseId = await enterprisesService.createOne(enterpriseData);
-
-              // Procesar industria
-              if (industria) {
-                const industryId = await findOrCreate(industriesService, 'name', industria);
-                if (industryId) {
-                  await enterprisesIndustriesService.createOne({
-                    enterprises_id: enterpriseId,
-                    industries_id: industryId
-                  });
-                }
-              }
-
-              // Procesar ubicaciones
-              if (ubicaciones) {
-                const ubicacionesList = ubicaciones.split(';').map(u => u.trim());
-                for (const ubicacion of ubicacionesList) {
-                  const locationId = await findOrCreate(locationsService, 'city', ubicacion, {
-                    country: 'Colombia',
-                    province: 'N/A'
-                  });
-                  if (locationId) {
-                    await enterprisesLocationsService.createOne({
-                      enterprises_id: enterpriseId,
-                      locations_id: locationId
-                    });
-                  }
-                }
-              }
-
-              // Procesar keywords
-              if (keywords) {
-                const keywordsList = keywords.split(';').map(k => k.trim()).filter(k => k);
-                for (const keyword of keywordsList) {
-                  const keywordId = await findOrCreate(keywordsService, 'name', keyword);
-                  if (keywordId) {
-                    await enterprisesKeywordsService.createOne({
-                      enterprises_id: enterpriseId,
-                      keywords_id: keywordId
-                    });
-                  }
-                }
-              }
-
-              // Procesar tecnologías
-              if (tecnologias) {
-                const tecnologiasList = tecnologias.split(';').map(t => t.trim()).filter(t => t);
-                for (const technology of tecnologiasList) {
-                  const technologyId = await findOrCreate(technologiesService, 'name', technology);
-                  if (technologyId) {
-                    await enterprisesTechnologiesService.createOne({
-                      enterprises_id: enterpriseId,
-                      technologies_id: technologyId
-                    });
-                  }
-                }
-              }
             }
           }
 
-          // 2. Crear persona
+          // Crear nueva persona
           const personData = {
-            name: nombre,
-            email: email || null,
-            phone: telefono || null
+            full_name: fullName,
+            acquisition_source: 'other'
           };
 
-          // Filtrar campos vacíos
-          Object.keys(personData).forEach(key => {
-            if (personData[key] === null || personData[key] === undefined || personData[key] === '') {
-              delete personData[key];
+          // Agregar campos opcionales
+          if (email && email.trim()) {
+            personData.primary_email = email.trim();
+          }
+
+          if (fieldMapping.phone_number !== undefined && values[fieldMapping.phone_number]) {
+            const phone = values[fieldMapping.phone_number].trim();
+            // Separar prefijo y número si el teléfono contiene un +
+            if (phone.startsWith('+')) {
+              const match = phone.match(/^(\+\d{1,4})\s*(.+)$/);
+              if (match) {
+                personData.phone_prefix = match[1];
+                personData.phone_number = match[2].replace(/\D/g, '');
+              } else {
+                personData.phone_number = phone.replace(/\D/g, '');
+              }
+            } else {
+              personData.phone_number = phone.replace(/\D/g, '');
             }
-          });
+          }
+
+          if (fieldMapping.position_title !== undefined && values[fieldMapping.position_title]) {
+            personData.position_title = values[fieldMapping.position_title].trim();
+          }
+
+          if (fieldMapping.notes !== undefined && values[fieldMapping.notes]) {
+            personData.notes = values[fieldMapping.notes].trim();
+          }
+
+          if (enterpriseId) {
+            personData.enterprise_relation_id = enterpriseId;
+          }
+
+          // Agregar nota de importación
+          const importNote = 'Importado desde CSV Pipedrive';
+          if (personData.notes) {
+            personData.notes = `${personData.notes}\n\n${importNote}`;
+          } else {
+            personData.notes = importNote;
+          }
 
           const newPerson = await peopleService.createOne(personData);
 
-          // 3. Crear relación de empleo si existe empresa
-          if (enterpriseId) {
-            await employmentHistoryService.createOne({
-              person_id: newPerson,
-              enterprise_id: enterpriseId,
-              is_current: true
-            });
-          }
-
           results.push({
-            person_id: newPerson,
-            enterprise_id: enterpriseId,
-            name: nombre,
-            status: 'success'
+            row: i + 1,
+            full_name: fullName,
+            primary_email: email,
+            enterprise_relation_id: enterpriseId,
+            status: 'created',
+            id: newPerson
           });
 
         } catch (error) {
@@ -412,7 +404,6 @@ module.exports = (router, { services, getSchema }) => {
         }
       }
 
-      // Respuesta
       res.json({
         success: true,
         message: `Importación de personas completada. ${results.length} registros procesados.`,

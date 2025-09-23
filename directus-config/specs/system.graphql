@@ -269,15 +269,16 @@ type Subscription {
   technologies_mutated(event: EventEnum): technologies_mutated
   enterprises_locations_mutated(event: EventEnum): enterprises_locations_mutated
   enterprises_technologies_mutated(event: EventEnum): enterprises_technologies_mutated
+  people_mutated(event: EventEnum): people_mutated
   people_technologies_mutated(event: EventEnum): people_technologies_mutated
   person_employment_history_mutated(event: EventEnum): person_employment_history_mutated
-  people_mutated(event: EventEnum): people_mutated
   industries_mutated(event: EventEnum): industries_mutated
   people_keywords_mutated(event: EventEnum): people_keywords_mutated
   enterprises_keywords_mutated(event: EventEnum): enterprises_keywords_mutated
   segments_mutated(event: EventEnum): segments_mutated
   enterprises_tags_mutated(event: EventEnum): enterprises_tags_mutated
   enterprise_tags_mutated(event: EventEnum): enterprise_tags_mutated
+  people_tags_mutated(event: EventEnum): people_tags_mutated
   enterprises_industries_mutated(event: EventEnum): enterprises_industries_mutated
   enterprises_mutated(event: EventEnum): enterprises_mutated
 }
@@ -1867,26 +1868,58 @@ type locations_mutated {
 }
 
 type people {
+  """ID autogenerado"""
   id: ID!
-  about: String
-  age: Int
+
+  """Notas y comentarios adicionales"""
+  notes: String
+
+  """Fecha de creación automática"""
   created_at: Date
   created_at_func: datetime_functions
-  email: String
-  image: ID
+
+  """Email principal de contacto"""
+  primary_email: String
+
+  """URL del perfil de LinkedIn"""
   linkedin: String
-  name: String
-  office_number: String
-  personal_phone: String
-  phone: String
-  sex: String
+
+  """Nombre completo de la persona (obligatorio)"""
+  full_name: String!
+
+  """Fecha de última actualización"""
   updated_at: Date
   updated_at_func: datetime_functions
-  location_id(filter: locations_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): locations
+
+  """Cargo o puesto de trabajo"""
+  position_title: String
+
+  """Área o departamento"""
+  department: String
+
+  """Prefijo telefónico (+E.164)"""
+  phone_prefix: String
+
+  """Número telefónico sin prefijo"""
+  phone_number: String
+  enterprise_relation_id(filter: enterprises_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): enterprises
+
+  """Nivel de decisión en la organización"""
+  decision_level: String
+
+  """Cómo se adquirió el contacto"""
+  acquisition_source: String
+
+  """Responsable interno del contacto"""
+  internal_owner: String
+
+  """Consentimiento para comunicaciones"""
+  communication_consent: Boolean
+  tags(filter: people_tags_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [people_tags]
+  tags_func: count_functions
   keywords(filter: people_keywords_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [people_keywords]
-  keywords_func: count_functions
   technologies(filter: people_technologies_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [people_technologies]
-  technologies_func: count_functions
+  location_id(filter: locations_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): locations
 }
 
 type people_keywords {
@@ -1905,6 +1938,20 @@ type people_mutated {
   key: ID!
   event: EventEnum
   data: people
+}
+
+type people_tags {
+  id: ID!
+  person_id(filter: people_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): people
+  tag_id(filter: enterprise_tags_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): enterprise_tags
+  created_at: Date
+  created_at_func: datetime_functions
+}
+
+type people_tags_mutated {
+  key: ID!
+  event: EventEnum
+  data: people_tags
 }
 
 type people_technologies {
@@ -3216,27 +3263,30 @@ input number_filter_operators {
 
 input people_filter {
   id: number_filter_operators
-  about: string_filter_operators
-  age: number_filter_operators
+  notes: string_filter_operators
   created_at: date_filter_operators
   created_at_func: datetime_function_filter_operators
-  email: string_filter_operators
-  image: id_filter_operators
+  primary_email: string_filter_operators
   linkedin: string_filter_operators
-  name: string_filter_operators
-  office_number: string_filter_operators
-  personal_phone: string_filter_operators
-  phone: string_filter_operators
-  sex: string_filter_operators
+  full_name: string_filter_operators
   updated_at: date_filter_operators
   updated_at_func: datetime_function_filter_operators
-  location_id: locations_filter
-  keywords: people_keywords_quantifier_filter
-  keywords_func: count_function_filter_operators
-  technologies: people_technologies_quantifier_filter
-  technologies_func: count_function_filter_operators
+  position_title: string_filter_operators
+  department: string_filter_operators
+  phone_prefix: string_filter_operators
+  phone_number: string_filter_operators
+  enterprise_relation_id: enterprises_filter
+  decision_level: string_filter_operators
+  acquisition_source: string_filter_operators
+  internal_owner: string_filter_operators
+  communication_consent: boolean_filter_operators
+  tags: people_tags_quantifier_filter
+  tags_func: count_function_filter_operators
   _and: [people_filter]
   _or: [people_filter]
+  keywords: people_keywords_quantifier_filter
+  technologies: people_technologies_quantifier_filter
+  location_id: locations_filter
 }
 
 input people_keywords_filter {
@@ -3256,6 +3306,29 @@ input people_keywords_quantifier_filter {
   _or: [people_keywords_filter]
   _some: people_keywords_filter
   _none: people_keywords_filter
+}
+
+input people_tags_filter {
+  id: number_filter_operators
+  person_id: people_filter
+  tag_id: enterprise_tags_filter
+  created_at: date_filter_operators
+  created_at_func: datetime_function_filter_operators
+  _and: [people_tags_filter]
+  _or: [people_tags_filter]
+}
+
+""""""
+input people_tags_quantifier_filter {
+  id: number_filter_operators
+  person_id: people_filter
+  tag_id: enterprise_tags_filter
+  created_at: date_filter_operators
+  created_at_func: datetime_function_filter_operators
+  _and: [people_tags_filter]
+  _or: [people_tags_filter]
+  _some: people_tags_filter
+  _none: people_tags_filter
 }
 
 input people_technologies_filter {

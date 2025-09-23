@@ -1,46 +1,43 @@
 {
   "collection": "people",
-  "field": "email",
+  "field": "primary_email",
   "type": "string",
   "meta": {
     "collection": "people",
     "conditions": null,
     "display": null,
     "display_options": null,
-    "field": "email",
+    "field": "primary_email",
     "group": null,
     "hidden": false,
     "interface": "input",
-    "note": null,
-    "options": {
-      "placeholder": "example@domain.com"
-    },
+    "note": "Email principal de contacto",
+    "options": null,
     "readonly": false,
     "required": false,
-    "sort": 4,
+    "sort": 6,
     "special": null,
-    "translations": null,
-    "validation": {
-      "_and": [
-        {
-          "email": {}
-        }
-      ]
-    },
-    "validation_message": "Debe ser un email válido",
+    "translations": [
+      {
+        "language": "es-ES",
+        "translation": "Email principal"
+      }
+    ],
+    "validation": null,
+    "validation_message": null,
     "width": "half"
   },
   "schema": {
-    "name": "email",
+    "name": "primary_email",
     "table": "people",
     "data_type": "character varying",
     "default_value": null,
-    "max_length": 255,
+    "max_length": 320,
     "numeric_precision": null,
     "numeric_scale": null,
     "is_nullable": true,
     "is_unique": false,
-    "is_indexed": false,
+    "is_indexed": true,
     "is_primary_key": false,
     "is_generated": false,
     "generation_expression": null,

@@ -1,0 +1,99 @@
+{
+  "collection": "people",
+  "field": "department",
+  "type": "string",
+  "meta": {
+    "collection": "people",
+    "conditions": null,
+    "display": null,
+    "display_options": null,
+    "field": "department",
+    "group": null,
+    "hidden": false,
+    "interface": "select-dropdown",
+    "note": "Área o departamento",
+    "options": {
+      "choices": [
+        {
+          "text": "Dirección General",
+          "value": "direccion_general"
+        },
+        {
+          "text": "Ventas",
+          "value": "ventas"
+        },
+        {
+          "text": "Marketing",
+          "value": "marketing"
+        },
+        {
+          "text": "Tecnología / IT",
+          "value": "tecnologia"
+        },
+        {
+          "text": "Recursos Humanos",
+          "value": "rrhh"
+        },
+        {
+          "text": "Finanzas",
+          "value": "finanzas"
+        },
+        {
+          "text": "Operaciones",
+          "value": "operaciones"
+        },
+        {
+          "text": "Compras",
+          "value": "compras"
+        },
+        {
+          "text": "Legal",
+          "value": "legal"
+        },
+        {
+          "text": "Producto",
+          "value": "producto"
+        },
+        {
+          "text": "Consultoría",
+          "value": "consultoria"
+        },
+        {
+          "text": "Otro",
+          "value": "otro"
+        }
+      ]
+    },
+    "readonly": false,
+    "required": false,
+    "sort": 4,
+    "special": null,
+    "translations": [
+      {
+        "language": "es-ES",
+        "translation": "Área / departamento"
+      }
+    ],
+    "validation": null,
+    "validation_message": null,
+    "width": "half"
+  },
+  "schema": {
+    "name": "department",
+    "table": "people",
+    "data_type": "character varying",
+    "default_value": null,
+    "max_length": 100,
+    "numeric_precision": null,
+    "numeric_scale": null,
+    "is_nullable": true,
+    "is_unique": false,
+    "is_indexed": true,
+    "is_primary_key": false,
+    "is_generated": false,
+    "generation_expression": null,
+    "has_auto_increment": false,
+    "foreign_key_table": null,
+    "foreign_key_column": null
+  }
+}

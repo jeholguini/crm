@@ -1,0 +1,25 @@
+{
+  "collection": "people_tags",
+  "field": "person_id",
+  "related_collection": "people",
+  "meta": {
+    "junction_field": "tag_id",
+    "many_collection": "people_tags",
+    "many_field": "person_id",
+    "one_allowed_collections": null,
+    "one_collection": "people",
+    "one_collection_field": null,
+    "one_deselect_action": "nullify",
+    "one_field": "tags",
+    "sort_field": null
+  },
+  "schema": {
+    "table": "people_tags",
+    "column": "person_id",
+    "foreign_key_table": "people",
+    "foreign_key_column": "id",
+    "constraint_name": "people_tags_person_id_fkey",
+    "on_update": "NO ACTION",
+    "on_delete": "CASCADE"
+  }
+}

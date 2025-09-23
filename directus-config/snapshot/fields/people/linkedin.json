@@ -1,7 +1,7 @@
 {
   "collection": "people",
   "field": "linkedin",
-  "type": "string",
+  "type": "text",
   "meta": {
     "collection": "people",
     "conditions": null,
@@ -11,15 +11,18 @@
     "group": null,
     "hidden": false,
     "interface": "input",
-    "note": null,
-    "options": {
-      "placeholder": "https://linkedin.com/in/usuario"
-    },
+    "note": "URL del perfil de LinkedIn",
+    "options": null,
     "readonly": false,
     "required": false,
-    "sort": 7,
+    "sort": 5,
     "special": null,
-    "translations": null,
+    "translations": [
+      {
+        "language": "es-ES",
+        "translation": "LinkedIn"
+      }
+    ],
     "validation": null,
     "validation_message": null,
     "width": "half"
@@ -27,9 +30,9 @@
   "schema": {
     "name": "linkedin",
     "table": "people",
-    "data_type": "character varying",
+    "data_type": "text",
     "default_value": null,
-    "max_length": 255,
+    "max_length": null,
     "numeric_precision": null,
     "numeric_scale": null,
     "is_nullable": true,

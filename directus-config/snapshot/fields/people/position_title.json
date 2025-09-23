@@ -1,44 +1,34 @@
 {
   "collection": "people",
-  "field": "sex",
+  "field": "position_title",
   "type": "string",
   "meta": {
     "collection": "people",
     "conditions": null,
     "display": null,
     "display_options": null,
-    "field": "sex",
+    "field": "position_title",
     "group": null,
     "hidden": false,
-    "interface": "select-dropdown",
-    "note": null,
-    "options": {
-      "choices": [
-        {
-          "text": "Masculino",
-          "value": "M"
-        },
-        {
-          "text": "Femenino",
-          "value": "F"
-        },
-        {
-          "text": "Otro",
-          "value": "O"
-        }
-      ]
-    },
+    "interface": "input",
+    "note": "Cargo o puesto de trabajo",
+    "options": null,
     "readonly": false,
     "required": false,
-    "sort": 9,
+    "sort": 3,
     "special": null,
-    "translations": null,
+    "translations": [
+      {
+        "language": "es-ES",
+        "translation": "Cargo / puesto"
+      }
+    ],
     "validation": null,
     "validation_message": null,
     "width": "half"
   },
   "schema": {
-    "name": "sex",
+    "name": "position_title",
     "table": "people",
     "data_type": "character varying",
     "default_value": null,

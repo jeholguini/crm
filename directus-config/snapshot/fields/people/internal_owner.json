@@ -1,31 +1,34 @@
 {
   "collection": "people",
-  "field": "personal_phone",
+  "field": "internal_owner",
   "type": "string",
   "meta": {
     "collection": "people",
     "conditions": null,
     "display": null,
     "display_options": null,
-    "field": "personal_phone",
+    "field": "internal_owner",
     "group": null,
     "hidden": false,
     "interface": "input",
-    "note": null,
-    "options": {
-      "placeholder": "+1234567890"
-    },
+    "note": "Responsable interno del contacto",
+    "options": null,
     "readonly": false,
     "required": false,
-    "sort": 5,
+    "sort": 12,
     "special": null,
-    "translations": null,
+    "translations": [
+      {
+        "language": "es-ES",
+        "translation": "Propietario interno"
+      }
+    ],
     "validation": null,
     "validation_message": null,
     "width": "half"
   },
   "schema": {
-    "name": "personal_phone",
+    "name": "internal_owner",
     "table": "people",
     "data_type": "character varying",
     "default_value": null,

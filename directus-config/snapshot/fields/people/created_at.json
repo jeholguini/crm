@@ -5,24 +5,24 @@
   "meta": {
     "collection": "people",
     "conditions": null,
-    "display": "datetime",
-    "display_options": {
-      "relative": true
-    },
+    "display": null,
+    "display_options": null,
     "field": "created_at",
     "group": null,
     "hidden": false,
     "interface": "datetime",
-    "note": null,
+    "note": "Fecha de creación automática",
     "options": null,
     "readonly": true,
     "required": false,
-    "sort": 6,
-    "special": [
-      "date-created",
-      "cast-timestamp"
+    "sort": 14,
+    "special": null,
+    "translations": [
+      {
+        "language": "es-ES",
+        "translation": "Fecha de creación"
+      }
     ],
-    "translations": null,
     "validation": null,
     "validation_message": null,
     "width": "half"
