@@ -1,6 +1,5 @@
 /node_modules
 extensions/*/node_modules
-extensions/*/dist
 .env
 data
 database
