@@ -12,7 +12,11 @@ RUN npm install -g pnpm --force
 USER node
 
 # Copy and build our custom extension first
+USER root
 COPY ./extensions/people-import /tmp/people-import
+RUN chown -R node:node /tmp/people-import
+USER node
+
 WORKDIR /tmp/people-import
 RUN npm ci && npm run build && npm pack
 
