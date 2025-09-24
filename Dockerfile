@@ -25,9 +25,6 @@ COPY ./templates /directus/templates
 COPY ./migrations /directus/migrations
 COPY ./config.cjs /directus/config.cjs
 
-# Install extension dependencies
-RUN cd /directus/extensions/ia-search && pnpm install
-
 # Migrations and Directus schema update
 RUN npx directus bootstrap           
 
