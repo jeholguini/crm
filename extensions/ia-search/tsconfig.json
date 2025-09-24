@@ -1,0 +1,3 @@
+{
+  "extends": "@directus/extensions-sdk/config/tsconfig.json"
+}
