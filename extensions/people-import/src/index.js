@@ -262,39 +262,48 @@ module.exports = (router, { services, getSchema, database }) => {
       // Procesar header
       const headers = parseCSVLine(lines[0]);
 
-      // Mapeo de campos del CSV a la estructura REAL de la tabla people
+      // Mapeo de campos del CSV a la estructura REAL de Directus people
       const fieldMapping = {};
       headers.forEach((header, index) => {
         switch (header.toLowerCase()) {
-          case 'name':
-            fieldMapping.name = index;
+          case 'full_name':
+            fieldMapping.full_name = index;
             break;
-          case 'email':
-            fieldMapping.email = index;
+          case 'primary_email':
+            fieldMapping.primary_email = index;
             break;
-          case 'personal_phone':
-            fieldMapping.personal_phone = index;
+          case 'position_title':
+            fieldMapping.position_title = index;
             break;
-          case 'office_number':
-            fieldMapping.office_number = index;
+          case 'department':
+            fieldMapping.department = index;
             break;
           case 'linkedin':
             fieldMapping.linkedin = index;
             break;
-          case 'about':
-            fieldMapping.about = index;
+          case 'phone_prefix':
+            fieldMapping.phone_prefix = index;
             break;
-          case 'sex':
-            fieldMapping.sex = index;
+          case 'phone_number':
+            fieldMapping.phone_number = index;
             break;
-          case 'age':
-            fieldMapping.age = index;
+          case 'enterprise_relation_id':
+            fieldMapping.enterprise_relation_id = index;
             break;
-          case 'image':
-            fieldMapping.image = index;
+          case 'decision_level':
+            fieldMapping.decision_level = index;
             break;
-          case 'location_id':
-            fieldMapping.location_id = index;
+          case 'acquisition_source':
+            fieldMapping.acquisition_source = index;
+            break;
+          case 'internal_owner':
+            fieldMapping.internal_owner = index;
+            break;
+          case 'notes':
+            fieldMapping.notes = index;
+            break;
+          case 'communication_consent':
+            fieldMapping.communication_consent = index;
             break;
         }
       });
@@ -304,102 +313,112 @@ module.exports = (router, { services, getSchema, database }) => {
         try {
           const values = parseCSVLine(lines[i]);
 
-          // Obtener nombre
-          const name = fieldMapping.name !== undefined ? values[fieldMapping.name] : null;
+          // Obtener nombre completo (campo requerido)
+          const fullName = fieldMapping.full_name !== undefined ? values[fieldMapping.full_name] : null;
 
-          if (!name || !name.trim()) {
+          if (!fullName || !fullName.trim()) {
             errors.push({
               row: i + 1,
-              error: 'Nombre requerido'
+              error: 'full_name requerido'
             });
             continue;
           }
 
           // Verificar si la persona ya existe por email o nombre
-          const email = fieldMapping.email !== undefined ? values[fieldMapping.email] : null;
+          const email = fieldMapping.primary_email !== undefined ? values[fieldMapping.primary_email] : null;
           let existingPerson = null;
 
           if (email && email.trim()) {
             existingPerson = await peopleService.readByQuery({
-              filter: { email: { _eq: email.trim() } },
+              filter: { primary_email: { _eq: email.trim() } },
               limit: 1,
-              fields: ['id', 'name', 'email']
+              fields: ['id', 'full_name', 'primary_email']
             });
           }
 
           if (!existingPerson || existingPerson.length === 0) {
             existingPerson = await peopleService.readByQuery({
-              filter: { name: { _eq: name.trim() } },
+              filter: { full_name: { _eq: fullName.trim() } },
               limit: 1,
-              fields: ['id', 'name', 'email']
+              fields: ['id', 'full_name', 'primary_email']
             });
           }
 
           if (existingPerson && existingPerson.length > 0) {
             results.push({
               row: i + 1,
-              name: name.trim(),
-              email: email,
+              full_name: fullName.trim(),
+              primary_email: email,
               status: 'exists',
               id: existingPerson[0].id
             });
             continue;
           }
 
-          // Crear nueva persona con los campos REALES
+          // Crear nueva persona con los campos REALES de Directus
           const personData = {
-            name: name.trim()
+            full_name: fullName.trim()
           };
 
-          // Agregar campos opcionales que coincidan con la tabla real
+          // Agregar campos opcionales que coincidan con Directus
           if (email && email.trim()) {
-            personData.email = email.trim();
+            personData.primary_email = email.trim();
           }
 
-          if (fieldMapping.personal_phone !== undefined && values[fieldMapping.personal_phone]) {
-            personData.personal_phone = values[fieldMapping.personal_phone].trim();
+          if (fieldMapping.position_title !== undefined && values[fieldMapping.position_title]) {
+            personData.position_title = values[fieldMapping.position_title].trim();
           }
 
-          if (fieldMapping.office_number !== undefined && values[fieldMapping.office_number]) {
-            personData.office_number = values[fieldMapping.office_number].trim();
+          if (fieldMapping.department !== undefined && values[fieldMapping.department]) {
+            personData.department = values[fieldMapping.department].trim();
           }
 
           if (fieldMapping.linkedin !== undefined && values[fieldMapping.linkedin]) {
             personData.linkedin = values[fieldMapping.linkedin].trim();
           }
 
-          if (fieldMapping.about !== undefined && values[fieldMapping.about]) {
-            personData.about = values[fieldMapping.about].trim();
+          if (fieldMapping.phone_prefix !== undefined && values[fieldMapping.phone_prefix]) {
+            personData.phone_prefix = values[fieldMapping.phone_prefix].trim();
           }
 
-          if (fieldMapping.sex !== undefined && values[fieldMapping.sex]) {
-            personData.sex = values[fieldMapping.sex].trim();
+          if (fieldMapping.phone_number !== undefined && values[fieldMapping.phone_number]) {
+            personData.phone_number = values[fieldMapping.phone_number].trim();
           }
 
-          if (fieldMapping.age !== undefined && values[fieldMapping.age]) {
-            const age = parseInt(values[fieldMapping.age]);
-            if (!isNaN(age)) {
-              personData.age = age;
+          if (fieldMapping.enterprise_relation_id !== undefined && values[fieldMapping.enterprise_relation_id]) {
+            const enterpriseId = parseInt(values[fieldMapping.enterprise_relation_id]);
+            if (!isNaN(enterpriseId)) {
+              personData.enterprise_relation_id = enterpriseId;
             }
           }
 
-          if (fieldMapping.image !== undefined && values[fieldMapping.image]) {
-            personData.image = values[fieldMapping.image].trim();
+          if (fieldMapping.decision_level !== undefined && values[fieldMapping.decision_level]) {
+            personData.decision_level = values[fieldMapping.decision_level].trim();
           }
 
-          if (fieldMapping.location_id !== undefined && values[fieldMapping.location_id]) {
-            const locationId = parseInt(values[fieldMapping.location_id]);
-            if (!isNaN(locationId)) {
-              personData.location_id = locationId;
-            }
+          if (fieldMapping.acquisition_source !== undefined && values[fieldMapping.acquisition_source]) {
+            personData.acquisition_source = values[fieldMapping.acquisition_source].trim();
+          }
+
+          if (fieldMapping.internal_owner !== undefined && values[fieldMapping.internal_owner]) {
+            personData.internal_owner = values[fieldMapping.internal_owner].trim();
+          }
+
+          if (fieldMapping.notes !== undefined && values[fieldMapping.notes]) {
+            personData.notes = values[fieldMapping.notes].trim();
+          }
+
+          if (fieldMapping.communication_consent !== undefined && values[fieldMapping.communication_consent]) {
+            const consent = values[fieldMapping.communication_consent].toLowerCase();
+            personData.communication_consent = consent === 'true' || consent === '1' || consent === 'yes';
           }
 
           const newPerson = await peopleService.createOne(personData);
 
           results.push({
             row: i + 1,
-            name: name.trim(),
-            email: email,
+            full_name: fullName.trim(),
+            primary_email: email,
             status: 'created',
             id: newPerson
           });
