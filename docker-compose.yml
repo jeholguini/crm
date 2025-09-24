@@ -114,6 +114,9 @@ services:
       EMAIL_SMTP_PASSWORD: ${EMAIL_SMTP_PASSWORD}
       EMAIL_FROM: ${EMAIL_FROM}
 
+      # OpenAI API Key para extensión de búsqueda IA
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+
       WEBSOCKETS_ENABLED: "true"
       EXTENSIONS_AUTO_RELOAD: "true"
 

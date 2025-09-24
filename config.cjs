@@ -54,5 +54,8 @@ module.exports = function (env) {
             EMAIL_SMTP_USER: env.EMAIL_SMTP_USER,
             EMAIL_SMTP_PASSWORD: env.EMAIL_SMTP_PASSWORD,
             EMAIL_FROM: env.EMAIL_FROM,
+
+            // OpenAI API Key para extensión de búsqueda IA
+            OPENAI_API_KEY: env.OPENAI_API_KEY,
     };
 };
