@@ -18,7 +18,7 @@
   "license": "ISC",
   "dependencies": {
     "csv-parser": "^3.2.0",
-    "directus-sync": "^3.4.0",
+    "directus-sync": "^3.4.1",
     "node-fetch": "^2.7.0"
   }
 }
