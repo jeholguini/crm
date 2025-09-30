@@ -253,11 +253,41 @@ module.exports = (router, { services, getSchema, database }) => {
       // Obtener esquema
       const schema = await getSchema();
 
-      // Servicios
+      // Servicios para personas y relaciones
       const peopleService = new ItemsService('people', { schema, accountability: req.accountability });
+      const tagsService = new ItemsService('tags', { schema, accountability: req.accountability });
+      const peopleTagsService = new ItemsService('people_tags', { schema, accountability: req.accountability });
+      const segmentsService = new ItemsService('segments', { schema, accountability: req.accountability });
+      const peopleSegmentsService = new ItemsService('people_segments', { schema, accountability: req.accountability });
 
       const results = [];
       const errors = [];
+
+      // Función auxiliar para encontrar o crear elemento
+      async function findOrCreate(service, field, value, defaultData = {}) {
+        if (!value || value.trim() === '') return null;
+
+        try {
+          const existing = await service.readByQuery({
+            filter: { [field]: { _eq: value.trim() } },
+            limit: 1
+          });
+
+          if (existing && existing.length > 0) {
+            return existing[0].id;
+          }
+
+          const newItem = await service.createOne({
+            [field]: value.trim(),
+            ...defaultData
+          });
+
+          return newItem;
+        } catch (error) {
+          console.error(`Error en findOrCreate para ${value}:`, error);
+          return null;
+        }
+      }
 
       // Procesar header
       const headers = parseCSVLine(lines[0]);
@@ -304,6 +334,12 @@ module.exports = (router, { services, getSchema, database }) => {
             break;
           case 'communication_consent':
             fieldMapping.communication_consent = index;
+            break;
+          case 'tags':
+            fieldMapping.tags = index;
+            break;
+          case 'segments':
+            fieldMapping.segments = index;
             break;
         }
       });
@@ -414,13 +450,56 @@ module.exports = (router, { services, getSchema, database }) => {
           }
 
           const newPerson = await peopleService.createOne(personData);
+          const personId = newPerson;
+
+          // Procesar tags (separados por ;)
+          if (fieldMapping.tags !== undefined && values[fieldMapping.tags]) {
+            const tagsList = values[fieldMapping.tags].split(';').map(tag => tag.trim()).filter(tag => tag);
+            for (const tagName of tagsList) {
+              const tagId = await findOrCreate(tagsService, 'name', tagName);
+              if (tagId) {
+                try {
+                  await peopleTagsService.createOne({
+                    person_id: personId,
+                    tag_id: tagId
+                  });
+                } catch (error) {
+                  // Ignorar errores de duplicados
+                  if (!error.message.includes('duplicate') && !error.message.includes('unique')) {
+                    console.error('Error creando relación tag:', error);
+                  }
+                }
+              }
+            }
+          }
+
+          // Procesar segmentos (separados por ;)
+          if (fieldMapping.segments !== undefined && values[fieldMapping.segments]) {
+            const segmentsList = values[fieldMapping.segments].split(';').map(seg => seg.trim()).filter(seg => seg);
+            for (const segmentName of segmentsList) {
+              const segmentId = await findOrCreate(segmentsService, 'name', segmentName);
+              if (segmentId) {
+                try {
+                  await peopleSegmentsService.createOne({
+                    people_id: personId,
+                    segments_id: segmentId
+                  });
+                } catch (error) {
+                  // Ignorar errores de duplicados
+                  if (!error.message.includes('duplicate') && !error.message.includes('unique')) {
+                    console.error('Error creando relación segmento:', error);
+                  }
+                }
+              }
+            }
+          }
 
           results.push({
             row: i + 1,
             full_name: fullName.trim(),
             primary_email: email,
             status: 'created',
-            id: newPerson
+            id: personId
           });
 
         } catch (error) {
