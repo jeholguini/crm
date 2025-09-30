@@ -44,16 +44,12 @@ export default defineEndpoint((router, { services }) => {
       // Obtener esquema para servicios
       const schema = req.schema;
 
-      // Servicios para cada colección (solo para empresas)
+      // Servicios para cada colección
       const enterprisesService = new ItemsService('enterprises', { schema, accountability: req.accountability });
       const industriesService = new ItemsService('industries', { schema, accountability: req.accountability });
-      const locationsService = new ItemsService('locations', { schema, accountability: req.accountability });
-      const keywordsService = new ItemsService('keywords', { schema, accountability: req.accountability });
-      const technologiesService = new ItemsService('technologies', { schema, accountability: req.accountability });
       const enterprisesIndustriesService = new ItemsService('enterprises_industries', { schema, accountability: req.accountability });
-      const enterprisesLocationsService = new ItemsService('enterprises_locations', { schema, accountability: req.accountability });
-      const enterprisesKeywordsService = new ItemsService('enterprises_keywords', { schema, accountability: req.accountability });
-      const enterprisesTechnologiesService = new ItemsService('enterprises_technologies', { schema, accountability: req.accountability });
+      const tagsService = new ItemsService('enterprise_tags', { schema, accountability: req.accountability });
+      const enterprisesTagsService = new ItemsService('enterprises_tags', { schema, accountability: req.accountability });
 
       const results: any[] = [];
       const errors: any[] = [];
@@ -93,45 +89,61 @@ export default defineEndpoint((router, { services }) => {
           // Parsear CSV simple (asumiendo comas como separador)
           const values = line.split(',').map((v: string) => v.trim().replace(/^"(.*)"$/, '$1'));
 
-          if (values.length < 10) {
+          // Mapear headers del CSV a campos de la base de datos
+          // Se esperan headers: organization_name, commercial_name, fiscal_identification, fiscal_identification_type,
+          // country, normalized_address, website, phone_prefix, phone_number, company_size, linkedin,
+          // acquisition_source, internal_owner, notes, industries (separados por ;), tags (separados por ;)
+
+          // Parsear valores del CSV
+          const fieldMap: any = {};
+          const headers = lines[0].split(',').map((h: string) => h.trim().replace(/^"(.*)"$/, '$1'));
+
+          headers.forEach((header: string, index: number) => {
+            fieldMap[header] = values[index] || null;
+          });
+
+          // Verificar campo obligatorio
+          if (!fieldMap.organization_name || fieldMap.organization_name.trim() === '') {
             errors.push({
               row: i + 1,
-              error: 'Fila incompleta, se esperan 10 columnas'
-            });
-            continue;
-          }
-
-          const [nit, nombre, telefono, email, industria, linkedin, fundacion, ubicaciones, keywords, tecnologias] = values;
-
-          // Verificar que tenemos los campos mínimos requeridos
-          if (!nit || !nombre) {
-            errors.push({
-              row: i + 1,
-              error: 'NIT y nombre son campos obligatorios'
+              error: 'organization_name es campo obligatorio'
             });
             continue;
           }
 
           // 1. Crear o encontrar empresa
           let enterpriseId = null;
-          const existingEnterprise = await enterprisesService.readByQuery({
-            filter: { nit: { _eq: nit } },
-            limit: 1
-          });
 
-          if (existingEnterprise && existingEnterprise.length > 0) {
-            // Empresa ya existe, actualizar información si es necesario
-            enterpriseId = existingEnterprise[0].id;
-            console.log(`Empresa existente encontrada: ${nombre} (ID: ${enterpriseId})`);
-          } else {
-            // Crear nueva empresa
+          // Buscar empresa existente por fiscal_identification si existe
+          if (fieldMap.fiscal_identification && fieldMap.fiscal_identification.trim() !== '') {
+            const existingEnterprise = await enterprisesService.readByQuery({
+              filter: { fiscal_identification: { _eq: fieldMap.fiscal_identification.trim() } },
+              limit: 1
+            });
+
+            if (existingEnterprise && existingEnterprise.length > 0) {
+              enterpriseId = existingEnterprise[0].id;
+              console.log(`Empresa existente encontrada: ${fieldMap.organization_name} (ID: ${enterpriseId})`);
+            }
+          }
+
+          if (!enterpriseId) {
+            // Crear nueva empresa con todos los campos
             const enterpriseData: any = {
-              nit: nit,
-              name: nombre,
-              phone: telefono || null,
-              email: email || null,
-              linkedin: linkedin || null,
-              founded_year: fundacion || null
+              organization_name: fieldMap.organization_name?.trim(),
+              commercial_name: fieldMap.commercial_name?.trim() || null,
+              fiscal_identification: fieldMap.fiscal_identification?.trim() || null,
+              fiscal_identification_type: fieldMap.fiscal_identification_type?.trim() || null,
+              country: fieldMap.country?.trim() || null,
+              normalized_address: fieldMap.normalized_address?.trim() || null,
+              website: fieldMap.website?.trim() || null,
+              phone_prefix: fieldMap.phone_prefix?.trim() || null,
+              phone_number: fieldMap.phone_number?.trim() || null,
+              company_size: fieldMap.company_size?.trim() || null,
+              linkedin: fieldMap.linkedin?.trim() || null,
+              acquisition_source: fieldMap.acquisition_source?.trim() || 'other',
+              internal_owner: fieldMap.internal_owner?.trim() || null,
+              notes: fieldMap.notes?.trim() || null
             };
 
             // Filtrar campos vacíos
@@ -142,63 +154,56 @@ export default defineEndpoint((router, { services }) => {
             });
 
             enterpriseId = await enterprisesService.createOne(enterpriseData);
-            console.log(`Nueva empresa creada: ${nombre} (ID: ${enterpriseId})`);
+            console.log(`Nueva empresa creada: ${fieldMap.organization_name} (ID: ${enterpriseId})`);
           }
 
-          // Procesar relaciones para la empresa (nueva o existente)
+          // Procesar relaciones para la empresa
           if (enterpriseId) {
-            // Procesar industria
-            if (industria) {
-              const industryId = await findOrCreate(industriesService, 'name', industria);
+            // Procesar industries (siempre asignar al menos "Sin clasificar")
+            let industriesList = [];
+            if (fieldMap.industries && fieldMap.industries.trim() !== '') {
+              industriesList = fieldMap.industries.split(';').map((ind: string) => ind.trim()).filter((ind: string) => ind);
+            }
+
+            // Si no hay industrias, asignar "Sin clasificar"
+            if (industriesList.length === 0) {
+              industriesList = ['Sin clasificar'];
+            }
+
+            for (const industryName of industriesList) {
+              const industryId = await findOrCreate(industriesService, 'name', industryName);
               if (industryId) {
-                await enterprisesIndustriesService.createOne({
-                  enterprises_id: enterpriseId,
-                  industries_id: industryId
-                });
-              }
-            }
-
-            // Procesar ubicaciones
-            if (ubicaciones) {
-              const ubicacionesList = ubicaciones.split(';').map((u: string) => u.trim());
-              for (const ubicacion of ubicacionesList) {
-                const locationId = await findOrCreate(locationsService, 'city', ubicacion, {
-                  country: 'Colombia',
-                  province: 'N/A'
-                });
-                if (locationId) {
-                  await enterprisesLocationsService.createOne({
+                try {
+                  await enterprisesIndustriesService.createOne({
                     enterprises_id: enterpriseId,
-                    locations_id: locationId
+                    industries_id: industryId
                   });
+                } catch (error: any) {
+                  // Ignorar errores de duplicados
+                  if (!error.message.includes('duplicate') && !error.message.includes('unique')) {
+                    console.error('Error creando relación industria:', error);
+                  }
                 }
               }
             }
 
-            // Procesar keywords
-            if (keywords) {
-              const keywordsList = keywords.split(';').map((k: string) => k.trim()).filter((k: string) => k);
-              for (const keyword of keywordsList) {
-                const keywordId = await findOrCreate(keywordsService, 'name', keyword);
-                if (keywordId) {
-                  await enterprisesKeywordsService.createOne({
-                    enterprises_id: enterpriseId,
-                    keywords_id: keywordId
-                  });
-                }
-              }
-            }
-
-            // Procesar tecnologías
-            if (tecnologias) {
-              const tecnologiasList = tecnologias.split(';').map((t: string) => t.trim()).filter((t: string) => t);
-              for (const technology of tecnologiasList) {
-                const technologyId = await findOrCreate(technologiesService, 'name', technology);
-                if (technologyId) {
-                  await enterprisesTechnologiesService.createOne({
-                    enterprises_id: enterpriseId,
-                    technologies_id: technologyId
-                  });
+            // Procesar tags
+            if (fieldMap.tags) {
+              const tagsList = fieldMap.tags.split(';').map((tag: string) => tag.trim()).filter((tag: string) => tag);
+              for (const tagName of tagsList) {
+                const tagId = await findOrCreate(tagsService, 'name', tagName);
+                if (tagId) {
+                  try {
+                    await enterprisesTagsService.createOne({
+                      enterprises_id: enterpriseId,
+                      enterprise_tags_id: tagId
+                    });
+                  } catch (error: any) {
+                    // Ignorar errores de duplicados
+                    if (!error.message.includes('duplicate') && !error.message.includes('unique')) {
+                      console.error('Error creando relación tag:', error);
+                    }
+                  }
                 }
               }
             }
@@ -207,8 +212,8 @@ export default defineEndpoint((router, { services }) => {
           // Resultado exitoso
           results.push({
             enterprise_id: enterpriseId,
-            name: nombre,
-            nit: nit,
+            organization_name: fieldMap.organization_name,
+            fiscal_identification: fieldMap.fiscal_identification,
             status: 'success'
           });
 
