@@ -255,6 +255,7 @@ module.exports = (router, { services, getSchema, database }) => {
 
       // Servicios para personas y relaciones
       const peopleService = new ItemsService('people', { schema, accountability: req.accountability });
+      const enterprisesService = new ItemsService('enterprises', { schema, accountability: req.accountability });
       const tagsService = new ItemsService('tags', { schema, accountability: req.accountability });
       const peopleTagsService = new ItemsService('people_tags', { schema, accountability: req.accountability });
       const segmentsService = new ItemsService('segments', { schema, accountability: req.accountability });
@@ -319,6 +320,11 @@ module.exports = (router, { services, getSchema, database }) => {
             break;
           case 'enterprise_relation_id':
             fieldMapping.enterprise_relation_id = index;
+            break;
+          case 'organization_name':
+          case 'enterprise_name':
+          case 'company_name':
+            fieldMapping.organization_name = index;
             break;
           case 'decision_level':
             fieldMapping.decision_level = index;
@@ -421,11 +427,40 @@ module.exports = (router, { services, getSchema, database }) => {
             personData.phone_number = values[fieldMapping.phone_number].trim();
           }
 
+          // Buscar empresa por ID o por nombre
+          let enterpriseId = null;
+
+          // Primero intentar por ID si está presente
           if (fieldMapping.enterprise_relation_id !== undefined && values[fieldMapping.enterprise_relation_id]) {
-            const enterpriseId = parseInt(values[fieldMapping.enterprise_relation_id]);
-            if (!isNaN(enterpriseId)) {
-              personData.enterprise_relation_id = enterpriseId;
+            const idValue = parseInt(values[fieldMapping.enterprise_relation_id]);
+            if (!isNaN(idValue)) {
+              enterpriseId = idValue;
             }
+          }
+
+          // Si no hay ID, buscar por nombre de organización
+          if (!enterpriseId && fieldMapping.organization_name !== undefined && values[fieldMapping.organization_name]) {
+            const orgName = values[fieldMapping.organization_name].trim();
+            if (orgName) {
+              try {
+                const existingEnterprise = await enterprisesService.readByQuery({
+                  filter: { organization_name: { _eq: orgName } },
+                  limit: 1,
+                  fields: ['id']
+                });
+
+                if (existingEnterprise && existingEnterprise.length > 0) {
+                  enterpriseId = existingEnterprise[0].id;
+                }
+              } catch (error) {
+                console.error(`Error buscando empresa "${orgName}":`, error);
+              }
+            }
+          }
+
+          // Asignar la empresa si se encontró
+          if (enterpriseId) {
+            personData.enterprise_relation_id = enterpriseId;
           }
 
           if (fieldMapping.decision_level !== undefined && values[fieldMapping.decision_level]) {
