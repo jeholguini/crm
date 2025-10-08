@@ -1,0 +1,24 @@
+{
+  "name": "enterprise-upsert",
+  "version": "1.0.0",
+  "keywords": [
+    "directus",
+    "directus-extension",
+    "directus-endpoint"
+  ],
+  "directus:extension": {
+    "type": "endpoint",
+    "path": "dist/index.js",
+    "source": "src/index.js",
+    "host": "^10.0.0"
+  },
+  "scripts": {
+    "build": "directus-extension build",
+    "dev": "directus-extension build -w --no-minify"
+  },
+  "devDependencies": {
+    "@directus/extensions-sdk": "^11.0.0",
+    "@types/node": "^22.5.4",
+    "typescript": "^5.6.2"
+  }
+}
